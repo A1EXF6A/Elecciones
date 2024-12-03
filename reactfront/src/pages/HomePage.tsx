@@ -11,7 +11,7 @@ const candidates: Candidates[] = [
   {
     id: 1,
     name: 'Mary Cruz',
-    description: '"Union y Futuro universitario"',
+    description: '""',
     imagenUrl: 'https://marycruzuta.com/assets/images/Mary.JPG',
   },
 ];
