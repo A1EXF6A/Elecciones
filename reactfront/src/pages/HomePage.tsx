@@ -19,7 +19,7 @@ const candidates: Candidates[] = [
 const candidates2: Candidates[] = [
   {
     id: 2,
-    name: 'Sara Camacho',
+    name: 'Sara Camac',
     description: '"Juntos por la UTA"',
     imagenUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIoG11PZrPHsSn_ejJ5L6UbrD479KVL8AukumvaQoZZKaElbY9htIKKSGfht2MWFLPIkW9ugYva19sQ7wsnM_uZjkn-x6SXSQjH3pyySu_TMleLtTS_H_QB15Y279Xf9Tp8oU9WVmH30Q/s1600/agosto+16+del+011+230.jpg',
   }
