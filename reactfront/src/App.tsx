@@ -50,7 +50,7 @@ function App() {
                     <Route path='/user/' element={<UserPage handleOnLogout={onLogout} />} />
                     <Route path='/propuestas' element={<CompShowPropuestas />} />
                     <Route path='/sugerencias' element={<SugerenciaForm />} />
-                    <Route path='/eventos/' element={<NewsPage/>} />
+                    <Route path='/eventos/' element={<NewsPage />} />
                 </Routes>
             </main>
         </>
