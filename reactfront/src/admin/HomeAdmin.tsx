@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import AgregarPropuestas from "./AgregarPropuestas";  // Importar el componente
+import CrearTipoEleccion from "./CrearTipoEleccion";
 
 // Definimos la interfaz para las funcionalidades
 interface Funcionalidad {
@@ -63,8 +64,8 @@ const AdminPanel: React.FC = () => {
                         {/* Mostrar contenido según la opción seleccionada */}
                         {selectedOption === "Crear listas de candidatos" && (
                             <div>
-                                <h3>Crear listas de candidatos</h3>
-                                <p>Aquí podrás crear nuevas listas con nombre y descripción.</p>
+                                <CrearTipoEleccion/>
+                                
                             </div>
                         )}
                         {selectedOption === "Agregar candidatos" && (

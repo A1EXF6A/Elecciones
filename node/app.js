@@ -21,6 +21,7 @@ app.use('/api/tipoEleccion', tipoEleccionRoutes);
 app.use('/api/candidatos', candidatoRoutes);
 app.use('/api/propuestas', propuestas);
 
+
 app.get('/test', (req, res) => {
     res.json({ message: 'Backend is running' });
 });
