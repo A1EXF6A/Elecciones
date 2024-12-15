@@ -2,9 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import db from './database/db.js';
-import userRouter from './routes/router.js';
 import propuestaRouter from './routes/propuestaRouter.js';
-import authRouter from './routes/authRouter.js'; // Importa las rutas de autenticación
 
 dotenv.config();
 const app = express();
@@ -20,7 +18,6 @@ app.use(express.json());
 // Rutas
 //app.use('/users', userRouter);
 app.use('/propuestas', propuestaRouter);
-app.use('/users', authRouter); // Ruta de autenticación para administradores
 
 app.get('/test', (req, res) => {
     res.json({ message: 'Backend is running' });

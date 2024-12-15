@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import AgregarPropuestas from "./AgregarPropuestas";  // Importar el componente
 
 // Definimos la interfaz para las funcionalidades
 interface Funcionalidad {
@@ -74,8 +75,7 @@ const AdminPanel: React.FC = () => {
                         )}
                         {selectedOption === "Agregar propuestas" && (
                             <div>
-                                <h3>Agregar propuestas</h3>
-                                <p>Aquí podrás asignar propuestas a los candidatos.</p>
+                                <AgregarPropuestas />
                             </div>
                         )}
                         {selectedOption === "Eliminar propuestas" && (
@@ -142,9 +142,6 @@ const styles: { [key: string]: React.CSSProperties } = {
         backgroundColor: "#34495e",
         transition: "background-color 0.3s",
     },
-    linkHover: {
-        backgroundColor: "#1abc9c",
-    },
     mainContent: {
         flex: 1,
         padding: "20px",
@@ -161,18 +158,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     },
     content: {
         marginTop: "20px",
-    },
-    list: {
-        listStyleType: "none",
-        padding: 0,
-    },
-    listItem: {
-        marginBottom: "15px",
-        padding: "10px",
-        border: "1px solid #ccc",
-        borderRadius: "5px",
-        backgroundColor: "#fff",
-        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.1)",
     },
 };
 
