@@ -5,21 +5,21 @@ import db from './database/db.js';
 import tipoEleccionRoutes from './routes/tipoEleccionRoutes.js';
 import candidatoRoutes from './routes/candidatoRouters.js';
 import propuestas from './routes/propuestaRoutes.js'
+import adminRouter from './routes/adminRouter.js';
 
 dotenv.config();
 const app = express();
 
 // Configuración de CORS más específica
-app.use(cors({
-    origin: 'http://localhost:5173', // Puerto donde corre tu app de React+Vite
-    credentials: true
-}));
+app.use(cors());
 
 app.use(express.json());
 
 app.use('/api/tipoEleccion', tipoEleccionRoutes);
 app.use('/api/candidatos', candidatoRoutes);
 app.use('/api/propuestas', propuestas);
+app.use('/api/administradores', adminRouter);
+// app.use('/api/eventos', eventos);
 
 app.get('/test', (req, res) => {
     res.json({ message: 'Backend is running' });

@@ -3,7 +3,7 @@ import { DataTypes } from 'sequelize';
 import db from '../database/db.js';
 import TipoEleccion from './TipoEleccion.js';
 
-const Candidato = db.define('Candidato', {
+const Candidato = db.define('candidato', {
     id_cand: {
         type: DataTypes.INTEGER,
         primaryKey: true,
