@@ -9,6 +9,7 @@ import { SugerenciaForm } from './pages/SugerenciasPage'
 import CompShowPropuestas from './pages/propuestas/Propuestas'
 import { Home } from './pages/HomePage'
 
+
 import './styles/app.css'
 import { NewsPage } from './pages/NewsPage'
 
@@ -21,7 +22,7 @@ function App() {
         setUserId(userId)
         localStorage.setItem('userId', userId)
         localStorage.setItem('vote', vote)
-        navigateTo(`/user/`)
+        navigateTo(`/admin/HomeAdmin`)
     }
 
     const onLogout = () => {
