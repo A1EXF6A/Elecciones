@@ -32,9 +32,11 @@ const Candidato = db.define('candidato', {
         allowNull: false,
     },
 }, {
-    tableName: 'candidato', // Asegúrate de que el nombre coincida con tu tabla
+    tableName: 'candidato',
     timestamps: false,
 });
 Candidato.belongsTo(TipoEleccion, { foreignKey: 'id_eleccion' });
 
 export default Candidato;
+
+

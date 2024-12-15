@@ -24,7 +24,7 @@ const AgregarPropuestas: React.FC = () => {
     const [nombrePropuesta, setNombrePropuesta] = useState<string>('');
     const [descripcionPropuesta, setDescripcionPropuesta] = useState<string>('');
     const [publico, setPublico] = useState<string>('');
-    const [mensaje, setMensaje] = useState<string>(''); // Estado para el mensaje de respuesta
+    const [mensaje, setMensaje] = useState<string>('');
 
     // Cargar tipos de elección
     useEffect(() => {
@@ -57,7 +57,7 @@ const AgregarPropuestas: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/api/propuestas', {
+            await axios.post('http://localhost:8000/api/propuestas', {
                 id_cand: selectedCandidato,
                 nom_pro: nombrePropuesta,
                 des_pro: descripcionPropuesta,

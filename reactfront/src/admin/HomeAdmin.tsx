@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import AgregarPropuestas from "./AgregarPropuestas";  // Importar el componente
+import AgregarCandidato from "./AgregarCandidato";
 
 // Definimos la interfaz para las funcionalidades
 interface Funcionalidad {
     id: number;
     nombre: string;
     descripcion: string;
-    ruta: string;
 }
 
 // Componente principal
@@ -17,11 +17,11 @@ const AdminPanel: React.FC = () => {
 
     // Lista de funcionalidades del administrador
     const funcionalidades: Funcionalidad[] = [
-        { id: 1, nombre: "Crear listas de candidatos", descripcion: "Permite crear nuevas listas con nombre y descripción.", ruta: "/admin/candidatos" },
-        { id: 2, nombre: "Agregar candidatos", descripcion: "Permite agregar candidatos a una lista y asignarles un cargo específico.", ruta: "/admin/agregar-candidatos" },
-        { id: 3, nombre: "Agregar propuestas", descripcion: "Permite asignar propuestas a los candidatos.", ruta: "/admin/agregar-propuestas" },
-        { id: 4, nombre: "Eliminar propuestas", descripcion: "Permite desactivar propuestas cambiando su estado a 'Inactiva'.", ruta: "/admin/eliminar-propuestas" },
-        { id: 5, nombre: "Ver resultados de los votos", descripcion: "Permite ver los resultados de votos por lista.", ruta: "/admin/resultados" },
+        { id: 1, nombre: "Crear listas de candidatos", descripcion: "Permite crear nuevas listas con nombre y descripción."},
+        { id: 2, nombre: "Agregar candidatos", descripcion: "Permite agregar candidatos a una lista y asignarles un cargo específico."},
+        { id: 3, nombre: "Agregar propuestas", descripcion: "Permite asignar propuestas a los candidatos."},
+        { id: 4, nombre: "Eliminar propuestas", descripcion: "Permite desactivar propuestas cambiando su estado a 'Inactiva'."},
+        { id: 5, nombre: "Ver resultados de los votos", descripcion: "Permite ver los resultados de votos por lista."},
     ];
 
     // Manejar la selección de una opción del menú
@@ -47,7 +47,7 @@ const AdminPanel: React.FC = () => {
                                 style={styles.menuItem}
                                 onClick={() => handleMenuClick(funcionalidad.nombre)}
                             >
-                                <Link to={funcionalidad.ruta} style={styles.link}>
+                                <Link to="" style={styles.link}>
                                     {funcionalidad.nombre}
                                 </Link>
                             </li>
@@ -56,7 +56,7 @@ const AdminPanel: React.FC = () => {
                             style={styles.menuItem}
                             onClick={() => handleLogout()}
                         >
-                            <Link to="/login/new" style={styles.link}>
+                            <Link to="/login/new" style={styles.linkLogout}>
                                 Cerrar Sesión
                             </Link>
                         </li>
@@ -82,8 +82,7 @@ const AdminPanel: React.FC = () => {
                         )}
                         {selectedOption === "Agregar candidatos" && (
                             <div>
-                                <h3>Agregar candidatos</h3>
-                                <p>Aquí podrás agregar candidatos a una lista y asignarles un cargo específico.</p>
+                                <AgregarCandidato />
                             </div>
                         )}
                         {selectedOption === "Agregar propuestas" && (
@@ -115,7 +114,7 @@ const AdminPanel: React.FC = () => {
 const styles: { [key: string]: React.CSSProperties } = {
     container: {
         display: "flex",
-        height: "100vh",
+        minHeight: "100vh",
         backgroundColor: "#f4f4f4",
     },
     menuContainer: {
@@ -153,6 +152,16 @@ const styles: { [key: string]: React.CSSProperties } = {
         padding: "10px",
         borderRadius: "5px",
         backgroundColor: "#34495e",
+        transition: "background-color 0.3s",
+    },
+    linkLogout: {
+        color: "#fff",
+        textDecoration: "none",
+        fontSize: "16px",
+        display: "block",
+        padding: "10px",
+        borderRadius: "5px",
+        backgroundColor: "#e74c3c",
         transition: "background-color 0.3s",
     },
     mainContent: {
