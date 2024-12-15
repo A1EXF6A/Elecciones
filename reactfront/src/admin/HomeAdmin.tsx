@@ -29,6 +29,11 @@ const AdminPanel: React.FC = () => {
         setSelectedOption(nombre);
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('adminId')
+        console.log('Sesión cerrada')
+    }
+
     return (
         <div style={styles.container}>
             <div style={styles.menuContainer}>
@@ -47,6 +52,14 @@ const AdminPanel: React.FC = () => {
                                 </Link>
                             </li>
                         ))}
+                        <li
+                            style={styles.menuItem}
+                            onClick={() => handleLogout()}
+                        >
+                            <Link to="/login/new" style={styles.link}>
+                                Cerrar Sesión
+                            </Link>
+                        </li>
                     </ul>
                 </div>
 
