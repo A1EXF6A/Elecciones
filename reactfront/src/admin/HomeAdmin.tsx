@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import AgregarPropuestas from "./AgregarPropuestas";  // Importar el componente
+import AgregarPropuestas from "./AgregarPropuestas"; // Importar el componente AgregarPropuestas
+import AgregarEvento from "./AgregarEvento"; // Importar el componente AgregarEvento
 
 // Definimos la interfaz para las funcionalidades
 interface Funcionalidad {
@@ -22,6 +23,7 @@ const AdminPanel: React.FC = () => {
         { id: 3, nombre: "Agregar propuestas", descripcion: "Permite asignar propuestas a los candidatos.", ruta: "/admin/agregar-propuestas" },
         { id: 4, nombre: "Eliminar propuestas", descripcion: "Permite desactivar propuestas cambiando su estado a 'Inactiva'.", ruta: "/admin/eliminar-propuestas" },
         { id: 5, nombre: "Ver resultados de los votos", descripcion: "Permite ver los resultados de votos por lista.", ruta: "/admin/resultados" },
+        { id: 6, nombre: "Agregar evento", descripcion: "Permite añadir un nuevo evento al sistema.", ruta: "/admin/agregar-evento" }, // Nueva funcionalidad
     ];
 
     // Manejar la selección de una opción del menú
@@ -90,7 +92,11 @@ const AdminPanel: React.FC = () => {
                                 <p>Aquí podrás ver los resultados de votos por lista.</p>
                             </div>
                         )}
-
+                        {selectedOption === "Agregar evento" && (
+                            <div>
+                                <AgregarEvento />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
