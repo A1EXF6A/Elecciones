@@ -29,7 +29,7 @@ const AgregarPropuestas: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const tipoResponse = await axios.get('http://localhost:5000/api/tipo_eleccion');
+                const tipoResponse = await axios.get('http://localhost:8000/api/tipoEleccion');
                 setTipoElecciones(tipoResponse.data);
             } catch (error) {
                 console.error('Error fetching tipo_eleccion:', error);
@@ -39,11 +39,12 @@ const AgregarPropuestas: React.FC = () => {
     }, []);
 
     // Cargar candidatos cuando se selecciona un tipo de elección
+    // AgregarPropuestas.tsx
     useEffect(() => {
         if (selectedTipo !== null) {
             const fetchCandidatos = async () => {
                 try {
-                    const candidatoResponse = await axios.get(`http://localhost:5000/api/candidatos/${selectedTipo}`);
+                    const candidatoResponse = await axios.get(`http://localhost:8000/api/candidatos/${selectedTipo}`);
                     setCandidatos(candidatoResponse.data);
                 } catch (error) {
                     console.error('Error fetching candidatos:', error);
@@ -53,10 +54,11 @@ const AgregarPropuestas: React.FC = () => {
         }
     }, [selectedTipo]);
 
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/api/propuestas', {
+            const response = await axios.post('http://localhost:8000/api/propuestas', {
                 id_cand: selectedCandidato,
                 nom_pro: nombrePropuesta,
                 des_pro: descripcionPropuesta,

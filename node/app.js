@@ -2,7 +2,9 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import db from './database/db.js';
-import propuestaRouter from './routes/propuestaRouter.js';
+import tipoEleccionRoutes from './routes/tipoEleccionRoutes.js';
+import candidatoRoutes from './routes/candidatoRouters.js';
+import propuestas from './routes/propuestaRoutes.js'
 
 dotenv.config();
 const app = express();
@@ -15,9 +17,9 @@ app.use(cors({
 
 app.use(express.json());
 
-// Rutas
-//app.use('/users', userRouter);
-app.use('/propuestas', propuestaRouter);
+app.use('/api/tipoEleccion', tipoEleccionRoutes);
+app.use('/api/candidatos', candidatoRoutes);
+app.use('/api/propuestas', propuestas);
 
 app.get('/test', (req, res) => {
     res.json({ message: 'Backend is running' });
