@@ -24,6 +24,7 @@ const AgregarPropuestas: React.FC = () => {
     const [nombrePropuesta, setNombrePropuesta] = useState<string>('');
     const [descripcionPropuesta, setDescripcionPropuesta] = useState<string>('');
     const [publico, setPublico] = useState<string>('');
+    const [mensaje, setMensaje] = useState<string>(''); // Estado para el mensaje de respuesta
 
     // Cargar tipos de elección
     useEffect(() => {
@@ -39,7 +40,6 @@ const AgregarPropuestas: React.FC = () => {
     }, []);
 
     // Cargar candidatos cuando se selecciona un tipo de elección
-    // AgregarPropuestas.tsx
     useEffect(() => {
         if (selectedTipo !== null) {
             const fetchCandidatos = async () => {
@@ -54,7 +54,6 @@ const AgregarPropuestas: React.FC = () => {
         }
     }, [selectedTipo]);
 
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -64,9 +63,19 @@ const AgregarPropuestas: React.FC = () => {
                 des_pro: descripcionPropuesta,
                 publico,
             });
-            console.log('Propuesta agregada:', response.data);
+
+            // Mensaje de éxito
+            setMensaje('Propuesta agregada correctamente!');
+            // Limpiar el formulario
+            setNombrePropuesta('');
+            setDescripcionPropuesta('');
+            setPublico('');
+            setSelectedCandidato(null);
+
         } catch (error) {
             console.error('Error al agregar propuesta:', error);
+            // Mensaje de error
+            setMensaje('Hubo un error al agregar la propuesta.');
         }
     };
 
@@ -148,6 +157,13 @@ const AgregarPropuestas: React.FC = () => {
                         Agregar Propuesta
                     </button>
                 </form>
+
+                {/* Mostrar mensaje de éxito o error */}
+                {mensaje && (
+                    <div className={`mensaje ${mensaje.includes('correctamente') ? 'exito' : 'error'}`}>
+                        {mensaje}
+                    </div>
+                )}
             </div>
         </div>
     );
