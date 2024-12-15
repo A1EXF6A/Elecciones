@@ -33,7 +33,7 @@ const Login = ({ handleOnLoginAdmin }: OnLoginAdmin) => {
     useEffect(() => {
         const userId = localStorage.getItem('adminId')
         if (userId) navigateTo(`/admin/`)
-    }, [])
+    }, [navigateTo])
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault()
