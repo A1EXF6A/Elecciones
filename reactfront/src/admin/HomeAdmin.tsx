@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import AgregarPropuestas from "./AgregarPropuestas";  // Importar el componente
+import AgregarPropuestas from "./AgregarPropuestas";
 import AgregarCandidato from "./AgregarCandidato";
+import AgregarEvento from "./AgregarEvento"; 
 
 // Definimos la interfaz para las funcionalidades
 interface Funcionalidad {
@@ -102,7 +103,11 @@ const AdminPanel: React.FC = () => {
                                 <p>Aquí podrás ver los resultados de votos por lista.</p>
                             </div>
                         )}
-
+                        {selectedOption === "Agregar evento" && (
+                            <div>
+                                <AgregarEvento />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

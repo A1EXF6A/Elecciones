@@ -1,8 +1,8 @@
 import { Sequelize } from "sequelize";
 
-const db = new Sequelize('App', 'postgres', 'admin', {
+const db = new Sequelize('App', 'root', '', {
   host: 'localhost',
-  dialect: 'postgres',
+  dialect: 'mysql',
   port: 5432,
 });
 

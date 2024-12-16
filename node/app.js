@@ -6,6 +6,7 @@ import tipoEleccionRoutes from './routes/tipoEleccionRoutes.js';
 import candidatoRoutes from './routes/candidatoRouters.js';
 import propuestas from './routes/propuestaRoutes.js'
 import adminRouter from './routes/adminRouter.js';
+import eventos from './routes/eventoRouters.js';
 
 dotenv.config();
 const app = express();
@@ -20,6 +21,7 @@ app.use('/api/candidatos', candidatoRoutes);
 app.use('/api/propuestas', propuestas);
 app.use('/api/administradores', adminRouter);
 // app.use('/api/eventos', eventos);
+app.use('/api/eventos', eventos);
 
 app.get('/test', (req, res) => {
     res.json({ message: 'Backend is running' });
