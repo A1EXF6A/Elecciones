@@ -24,7 +24,7 @@ const Propuesta = db.define('propuesta', {
         allowNull: false,
     },
 }, {
-    tableName: 'propuestas', 
+    tableName: 'propuestas1', 
     timestamps: false,
 });
 

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import AgregarPropuestas from "./AgregarPropuestas";
+
+import AgregarPropuestas from "./AgregarPropuestas";  // Importar el componente
+import CrearTipoEleccion from "./CrearTipoEleccion";
 import AgregarCandidato from "./AgregarCandidato";
 import AgregarEvento from "./AgregarEvento";
 import CompShowPropuestas from "../pages/propuestas/Propuestas";
@@ -19,11 +21,12 @@ const AdminPanel: React.FC = () => {
 
     // Lista de funcionalidades del administrador
     const funcionalidades: Funcionalidad[] = [
-        { id: 1, nombre: "Crear listas de candidatos", descripcion: "Permite crear nuevas listas con nombre y descripción." },
-        { id: 2, nombre: "Agregar candidatos", descripcion: "Permite agregar candidatos a una lista y asignarles un cargo específico." },
-        { id: 3, nombre: "Agregar propuestas", descripcion: "Permite asignar propuestas a los candidatos." },
-        { id: 4, nombre: "Ver propuestas", descripcion: "Permite desactivar propuestas cambiando su estado a 'Inactiva'." },
-        { id: 5, nombre: "Ver resultados de los votos", descripcion: "Permite ver los resultados de votos por lista." },
+        { id: 1, nombre: "Crear listas de candidatos", descripcion: "Permite crear nuevas listas con nombre y descripción."  },
+        { id: 2, nombre: "Agregar candidatos", descripcion: "Permite agregar candidatos a una lista y asignarles un cargo específico."  },
+        { id: 3, nombre: "Agregar propuestas", descripcion: "Permite asignar propuestas a los candidatos."  },
+        { id: 4, nombre: "Ver propuestas", descripcion: "Permite desactivar propuestas cambiando su estado a 'Inactiva'."  },
+        { id: 5, nombre: "Ver resultados de los votos", descripcion: "Permite ver los resultados de votos por lista."  },
+        { id: 6, nombre: "Agregar evento", descripcion: "Permite añadir un nuevo evento al sistema." }, // Nueva funcionalidad
     ];
 
     // Manejar la selección de una opción del menú
@@ -79,8 +82,8 @@ const AdminPanel: React.FC = () => {
                         {/* Mostrar contenido según la opción seleccionada */}
                         {selectedOption === "Crear listas de candidatos" && (
                             <div>
-                                <h3>Crear listas de candidatos</h3>
-                                <p>Aquí podrás crear nuevas listas con nombre y descripción.</p>
+                                <CrearTipoEleccion/>
+                                
                             </div>
                         )}
                         {selectedOption === "Agregar candidatos" && (

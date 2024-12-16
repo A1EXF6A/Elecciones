@@ -23,6 +23,7 @@ app.use('/api/administradores', adminRouter);
 // app.use('/api/eventos', eventos);
 app.use('/api/eventos', eventos);
 
+
 app.get('/test', (req, res) => {
     res.json({ message: 'Backend is running' });
 });
