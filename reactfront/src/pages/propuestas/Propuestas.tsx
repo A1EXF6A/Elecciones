@@ -8,6 +8,7 @@ import './Propuestas.css';
 const URI = "http://localhost:8000/propuestas/";
 
 interface Propuesta {
+    id: number; // Agrega un identificador único para cada propuesta
     nom_cand: string;
     inf_pro: string;
     pub_pro: string;
@@ -23,7 +24,7 @@ const CompShowPropuestas = () => {
     const [selectedPubPro, setSelectedPubPro] = useState<string>("");
 
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const itemsPerPage = 5;  // Mostrar 5 propuestas por página
+    const itemsPerPage = 5;
 
     useEffect(() => {
         getPropuestas();
@@ -33,9 +34,9 @@ const CompShowPropuestas = () => {
         try {
             const res = await axios.get(URI);
             setPropuestas(res.data);
-            setFilteredPropuestas(res.data);  // Mostrar todas las propuestas al inicio
+            setFilteredPropuestas(res.data);
         } catch (error) {
-            setError(error instanceof Error ? error.message : 'Error desconocido');
+            setError(error instanceof Error ? error.message : "Error desconocido");
         }
     };
 
@@ -53,7 +54,6 @@ const CompShowPropuestas = () => {
         setPubProOptions(uniquePubProOptions);
     };
 
-
     const handlePubProFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const pubPro = event.target.value;
         setSelectedPubPro(pubPro);
@@ -66,6 +66,22 @@ const CompShowPropuestas = () => {
         setCurrentPage(1);
     };
 
+    const handleEditPropuesta = (propuesta: Propuesta) => {
+        console.log("Editar propuesta:", propuesta);
+        // Implementa la lógica para abrir un modal o formulario de edición
+    };
+
+    const handleDeletePropuesta = async (propuestaId: number) => {
+        if (window.confirm("¿Estás seguro de que deseas eliminar esta propuesta?")) {
+            try {
+                await axios.delete(`${URI}${propuestaId}`);
+                setPropuestas(propuestas.filter(propuesta => propuesta.id !== propuestaId));
+                setFilteredPropuestas(filteredPropuestas.filter(propuesta => propuesta.id !== propuestaId));
+            } catch (error) {
+                console.error("Error al eliminar propuesta:", error);
+            }
+        }
+    };
 
     const uniqueCandidatos = Array.from(new Set(propuestas.map(propuesta => propuesta.nom_cand)));
 
@@ -83,7 +99,6 @@ const CompShowPropuestas = () => {
             <h1>Propuestas</h1>
             {error && <div className="alert alert-danger">{error}</div>}
 
-            {/* Mostrar lista de candidatos solo si no hay candidato seleccionado */}
             {!selectedCandidato ? (
                 <CandidatoList
                     candidatos={uniqueCandidatos}
@@ -101,7 +116,7 @@ const CompShowPropuestas = () => {
                         className="btn btn-warning mb-3"
                         onClick={() => {
                             setSelectedCandidato(null);
-                            setFilteredPropuestas(propuestas); // Mostrar todas las propuestas de nuevo
+                            setFilteredPropuestas(propuestas);
                             setCurrentPage(1);
                         }}
                     >
@@ -110,12 +125,13 @@ const CompShowPropuestas = () => {
                 </>
             )}
 
-            {/* Listado de propuestas según selección */}
             <PropuestaList
                 propuestas={currentPropuestas}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={handlePageChange}
+                onEdit={handleEditPropuesta}
+                onDelete={handleDeletePropuesta}
             />
         </div>
     );
