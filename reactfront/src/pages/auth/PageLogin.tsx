@@ -1,15 +1,20 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { useField } from '../../util/hooks/useField';
-import { loginUser } from '../../util/auth';
+import { loginAdmin } from '../../util/auth';
 
 import clsx from 'clsx';
 
-interface OnLogin {
-    handleOnLogin: (userId: string, vote: string) => void
+// interface OnLogin {
+//     handleOnLogin: (userId: string, vote: string) => void
+// }
+
+interface OnLoginAdmin {
+    handleOnLoginAdmin: (id: string) => void
 }
 
-const Login = ({ handleOnLogin }: OnLogin) => {
+// const Login = ({ handleOnLogin }: OnLoginAdmin) => {
+const Login = ({ handleOnLoginAdmin }: OnLoginAdmin) => {
     const { state } = useParams()
     const newRegister = state === 'success'
 
@@ -26,27 +31,42 @@ const Login = ({ handleOnLogin }: OnLogin) => {
     })
 
     useEffect(() => {
-        const userId = localStorage.getItem('userId')
-        if (userId) navigateTo(`/user/`)
-    }, [])
+        const userId = localStorage.getItem('adminId')
+        if (userId) navigateTo(`/admin/`)
+    }, [navigateTo])
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault()
-        handleLogin()
+        // handleLogin()
+        handleLoginAdmin()
     }
 
-    const handleLogin = async () => {
-        const { success, data } = await loginUser({
-            credential: userCredential.value,
+    // const handleLogin = async () => {
+    //     const { success, data } = await loginUser({
+    //         credential: userCredential.value,
+    //         password: password.value
+    //     })
+
+    //     setfailLogin(!success)
+
+    //     if (success) {
+    //         const userId = String(data?.id_use)
+    //         const voteId = String(data?.vot_use)
+    //         handleOnLogin(userId, voteId)
+    //     }
+    // }
+
+    const handleLoginAdmin = async () => {
+        const { success, data } = await loginAdmin({
+            userName: userCredential.value,
             password: password.value
         })
 
         setfailLogin(!success)
 
         if (success) {
-            const userId = String(data?.id_use)
-            const voteId = String(data?.vot_use)
-            handleOnLogin(userId, voteId)
+            const userId = String(data?.id)
+            handleOnLoginAdmin(userId!)
         }
     }
 

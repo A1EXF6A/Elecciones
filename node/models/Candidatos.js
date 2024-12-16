@@ -3,7 +3,7 @@ import { DataTypes } from 'sequelize';
 import db from '../database/db.js';
 import TipoEleccion from './TipoEleccion.js';
 
-const Candidato = db.define('Candidato', {
+const Candidato = db.define('candidato', {
     id_cand: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -32,9 +32,11 @@ const Candidato = db.define('Candidato', {
         allowNull: false,
     },
 }, {
-    tableName: 'candidato', // Asegúrate de que el nombre coincida con tu tabla
+    tableName: 'candidato',
     timestamps: false,
 });
 Candidato.belongsTo(TipoEleccion, { foreignKey: 'id_eleccion' });
 
 export default Candidato;
+
+

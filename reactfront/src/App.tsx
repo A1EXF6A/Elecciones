@@ -11,17 +11,23 @@ import { Home } from './pages/HomePage'
 
 import './styles/app.css'
 import { NewsPage } from './pages/NewsPage'
+import HomeAdmin from './admin/HomeAdmin'
 
 
 function App() {
     const [userId, setUserId] = useState<string>('')
     const navigateTo = useNavigate()
 
-    const onLogin = (userId: string, vote: string) => {
-        setUserId(userId)
-        localStorage.setItem('userId', userId)
-        localStorage.setItem('vote', vote)
-        navigateTo(`/admin/HomeAdmin`)
+    // const onLogin = (userId: string, vote: string) => {
+    //     setUserId(userId)
+    //     localStorage.setItem('userId', userId)
+    //     localStorage.setItem('vote', vote)
+    // }
+
+    const onLoginAdmin = (id: string) => {
+        setUserId(id)
+        localStorage.setItem('adminId', id)
+        navigateTo('/admin/')
     }
 
     const onLogout = () => {
@@ -31,8 +37,15 @@ function App() {
         navigateTo('/login/new')
     }
 
+    // useEffect(() => {
+    //     const userId = localStorage.getItem('userId')
+    //     if (userId) {
+    //         setUserId(userId)
+    //     }
+    // }, [])
+
     useEffect(() => {
-        const userId = localStorage.getItem('userId')
+        const userId = localStorage.getItem('adminId')
         if (userId) {
             setUserId(userId)
         }
@@ -45,13 +58,14 @@ function App() {
                 <Routes>
                     <Route path='/' element={<Home />} />
                     <Route path='/candidatos' element={<CandidatosPage />} />
-                    <Route path='/login/:state' element={<Login handleOnLogin={onLogin} />} />
+                    <Route path='/login/:state' element={<Login handleOnLoginAdmin={onLoginAdmin} />} />
                     <Route path='/register' element={<Register />} />
                     <Route path='/user/' element={<UserPage handleOnLogout={onLogout} />} />
                     <Route path='/propuestas' element={<CompShowPropuestas />} />
                     <Route path='/sugerencias' element={<SugerenciaForm />} />
                     <Route path='/eventos/' element={<NewsPage />} />
-                    
+                   <Route path='/admin/' element={<HomeAdmin />} />
+
                 </Routes>
             </main>
         </>

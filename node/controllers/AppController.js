@@ -1,4 +1,3 @@
-import { Sequelize } from "sequelize";
 import AppModel from "../models/AppModel.js";
 
 const getAllUsers = async (req, res) => {
