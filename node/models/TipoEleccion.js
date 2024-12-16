@@ -11,9 +11,13 @@ const TipoEleccion = db.define('TipoEleccion', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    descripcion: { // Nueva columna
+        type: DataTypes.TEXT, // Usa TEXT si esperas descripciones largas
+        allowNull: false,
+    },
 }, {
-    tableName: 'tipo_eleccion', // Asegúrate de que el nombre coincida con tu tabla
-    timestamps: false, // Si no tienes columnas createdAt y updatedAt
+    tableName: 'tipo_eleccion',
+    timestamps: false,
 });
 
 export default TipoEleccion;

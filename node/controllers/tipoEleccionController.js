@@ -13,23 +13,32 @@ export const getTipoElecciones = async (req, res) => {
         res.status(500).json({ error: 'Error al obtener tipos de elecciones' });
     }
 
-    
+
 };
 
 // Función para crear un tipo de elección
-export const createTipoEleccion = async (req, res) => {
+export const agregarTipoEleccion = async (req, res) => {
     try {
-        const { nombre } = req.body;
-        if (!nombre) {
-            return res.status(400).json({ message: 'El nombre es obligatorio' });
+        const { nombre_eleccion, descripcion } = req.body; // Coincide con los datos enviados desde el frontend
+
+        // Validación de los datos
+        if (!nombre_eleccion || !descripcion) {
+            return res.status(400).json({ error: 'Todos los campos son obligatorios' });
         }
 
-        const nuevoTipoEleccion = await TipoEleccion.create({ nombre });
-        res.status(201).json(nuevoTipoEleccion);
+        // Crear el nuevo tipo de elección
+        const nuevoTipoEleccion = await TipoEleccion.create({
+            nombre_eleccion,
+            descripcion,
+        });
+
+        res.status(201).json({
+            message: 'Tipo de elección agregado con éxito',
+            tipoEleccion: nuevoTipoEleccion,
+        });
     } catch (error) {
-        console.error('Error al crear tipo de elección:', error);
-        res.status(500).json({ error: 'Error al crear tipo de elección' });
+        console.error('Error al agregar el tipo de elección:', error);
+        res.status(500).json({ error: 'Error al agregar el tipo de elección' });
     }
 };
-
 

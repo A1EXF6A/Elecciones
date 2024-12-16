@@ -1,5 +1,5 @@
 import express from 'express';
-import { getTipoElecciones, createTipoEleccion } from '../controllers/tipoEleccionController.js';
+import { getTipoElecciones, agregarTipoEleccion } from '../controllers/tipoEleccionController.js';
 
 const router = express.Router();
 
@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/', getTipoElecciones);
 
 // Ruta para crear un tipo de elección
-router.post('/', createTipoEleccion);
+router.post('/', agregarTipoEleccion);
 
 export default router;
+
