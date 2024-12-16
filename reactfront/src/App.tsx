@@ -64,7 +64,8 @@ function App() {
                     <Route path='/propuestas' element={<CompShowPropuestas />} />
                     <Route path='/sugerencias' element={<SugerenciaForm />} />
                     <Route path='/eventos/' element={<NewsPage />} />
-                    <Route path='/admin/' element={<HomeAdmin />} />
+                   <Route path='/admin/' element={<HomeAdmin />} />
+
                 </Routes>
             </main>
         </>
