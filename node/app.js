@@ -4,7 +4,7 @@ import cors from 'cors';
 import db from './database/db.js';
 import tipoEleccionRoutes from './routes/tipoEleccionRoutes.js';
 import candidatoRoutes from './routes/candidatoRouters.js';
-import propuestas from './routes/propuestaRoutes.js'
+import routerPro from './routes/propuestaRoutes.js';
 import adminRouter from './routes/adminRouter.js';
 import eventos from './routes/eventoRouters.js';
 
@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use('/api/tipoEleccion', tipoEleccionRoutes);
 app.use('/api/candidatos', candidatoRoutes);
-app.use('/api/propuestas', propuestas);
+app.use('/api/propuestas', routerPro);
 app.use('/api/administradores', adminRouter);
 // app.use('/api/eventos', eventos);
 app.use('/api/eventos', eventos);

@@ -1,14 +1,15 @@
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
 import CandidatoList from "../../components/propuestas/CandidatoList";
 import PropuestaList from "../../components/propuestas/PropuestaList";
 import PubProFilter from "../../components/propuestas/PubProFilter";
+import EditModal from "./EditModal";
 import './Propuestas.css';
 
-const URI = "http://localhost:8000/propuestas/";
+const URI = "http://localhost:8000/api/propuestas/";
 
 interface Propuesta {
-    id: number; // Agrega un identificador único para cada propuesta
+    id: number;
     nom_cand: string;
     inf_pro: string;
     pub_pro: string;
@@ -22,8 +23,9 @@ const CompShowPropuestas = () => {
     const [selectedCandidato, setSelectedCandidato] = useState<string | null>(null);
     const [pubProOptions, setPubProOptions] = useState<string[]>([]);
     const [selectedPubPro, setSelectedPubPro] = useState<string>("");
-
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [editingPropuesta, setEditingPropuesta] = useState<Propuesta | null>(null); // Estado para editar
+
     const itemsPerPage = 5;
 
     useEffect(() => {
@@ -32,7 +34,7 @@ const CompShowPropuestas = () => {
 
     const getPropuestas = async () => {
         try {
-            const res = await axios.get(URI);
+            const res = await axios.get(URI + 'ver');
             setPropuestas(res.data);
             setFilteredPropuestas(res.data);
         } catch (error) {
@@ -67,8 +69,7 @@ const CompShowPropuestas = () => {
     };
 
     const handleEditPropuesta = (propuesta: Propuesta) => {
-        console.log("Editar propuesta:", propuesta);
-        // Implementa la lógica para abrir un modal o formulario de edición
+        setEditingPropuesta(propuesta); // Establece la propuesta seleccionada para editar
     };
 
     const handleDeletePropuesta = async (propuestaId: number) => {
@@ -81,6 +82,26 @@ const CompShowPropuestas = () => {
                 console.error("Error al eliminar propuesta:", error);
             }
         }
+    };
+
+    const handleUpdatePropuesta = async (updatedPropuesta: Propuesta) => {
+        try {
+            await axios.put(`${URI}${updatedPropuesta.id}`, updatedPropuesta);
+            // Actualizar el estado
+            setPropuestas(propuestas.map(propuesta =>
+                propuesta.id === updatedPropuesta.id ? updatedPropuesta : propuesta
+            ));
+            setFilteredPropuestas(filteredPropuestas.map(propuesta =>
+                propuesta.id === updatedPropuesta.id ? updatedPropuesta : propuesta
+            ));
+            setEditingPropuesta(null); // Cerrar el modal
+        } catch (error) {
+            console.error("Error al actualizar propuesta:", error);
+        }
+    };
+
+    const handleCloseEditModal = () => {
+        setEditingPropuesta(null);
     };
 
     const uniqueCandidatos = Array.from(new Set(propuestas.map(propuesta => propuesta.nom_cand)));
@@ -133,6 +154,14 @@ const CompShowPropuestas = () => {
                 onEdit={handleEditPropuesta}
                 onDelete={handleDeletePropuesta}
             />
+
+            {editingPropuesta && (
+                <EditModal
+                    propuesta={editingPropuesta}
+                    onUpdate={handleUpdatePropuesta}
+                    onClose={handleCloseEditModal}
+                />
+            )}
         </div>
     );
 };

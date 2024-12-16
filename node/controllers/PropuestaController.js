@@ -1,11 +1,9 @@
-import PropuestaModel from '../models/PropuestaModel.js';
+import Propuesta from "../models/Propuesta.js";
 
 export const getAllPropuestas = async (req, res) => {
     try {
         console.log('Intentando obtener propuestas...');
-        const propuestas = await PropuestaModel.findAll({
-            attributes: ['nom_cand', 'inf_pro', 'pub_pro', 'nom_pro']  // Solo selecciona estos campos
-        });
+        const propuestas = await Propuesta.findAll();
 
         console.log('Propuestas encontradas:', propuestas);
 

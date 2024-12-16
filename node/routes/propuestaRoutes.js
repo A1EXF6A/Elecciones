@@ -1,9 +1,10 @@
 import express from 'express';
 import { agregarPropuesta } from '../controllers/propuestasController.js';
+import { getAllPropuestas } from '../controllers/PropuestaController.js';
 
-const router = express.Router();
+const routerPro = express.Router();
 
-// Ruta para agregar una nueva propuesta
-router.post('/', agregarPropuesta);
+routerPro.post('/', agregarPropuesta);
+routerPro.get('/ver', getAllPropuestas);
 
-export default router;
+export default routerPro;
