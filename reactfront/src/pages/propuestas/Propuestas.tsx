@@ -9,9 +9,9 @@ import './Propuestas.css';
 const URI = "http://localhost:8000/api/propuestas/";
 
 interface Propuesta {
-    id: number;
+    id_pro: number;
     nom_cand: string;
-    inf_pro: string;
+    des_pro: string;
     pub_pro: string;
     nom_pro: string;
 }
@@ -76,8 +76,8 @@ const CompShowPropuestas = () => {
         if (window.confirm("¿Estás seguro de que deseas eliminar esta propuesta?")) {
             try {
                 await axios.delete(`${URI}${propuestaId}`);
-                setPropuestas(propuestas.filter(propuesta => propuesta.id !== propuestaId));
-                setFilteredPropuestas(filteredPropuestas.filter(propuesta => propuesta.id !== propuestaId));
+                setPropuestas(propuestas.filter(propuesta => propuesta.id_pro !== propuestaId));
+                setFilteredPropuestas(filteredPropuestas.filter(propuesta => propuesta.id_pro !== propuestaId));
             } catch (error) {
                 console.error("Error al eliminar propuesta:", error);
             }
@@ -86,13 +86,12 @@ const CompShowPropuestas = () => {
 
     const handleUpdatePropuesta = async (updatedPropuesta: Propuesta) => {
         try {
-            await axios.put(`${URI}${updatedPropuesta.id}`, updatedPropuesta);
-            // Actualizar el estado
+            await axios.put(`${URI}${updatedPropuesta.id_pro}`, updatedPropuesta);
             setPropuestas(propuestas.map(propuesta =>
-                propuesta.id === updatedPropuesta.id ? updatedPropuesta : propuesta
+                propuesta.id_pro === updatedPropuesta.id_pro ? updatedPropuesta : propuesta
             ));
             setFilteredPropuestas(filteredPropuestas.map(propuesta =>
-                propuesta.id === updatedPropuesta.id ? updatedPropuesta : propuesta
+                propuesta.id_pro === updatedPropuesta.id_pro ? updatedPropuesta : propuesta
             ));
             setEditingPropuesta(null); // Cerrar el modal
         } catch (error) {
@@ -105,7 +104,7 @@ const CompShowPropuestas = () => {
     };
 
     const uniqueCandidatos = Array.from(new Set(propuestas.map(propuesta => propuesta.nom_cand)));
-
+ 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentPropuestas = filteredPropuestas.slice(indexOfFirstItem, indexOfLastItem);

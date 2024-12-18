@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
 interface Propuesta {
-    id: number;
+    id_pro: number;
     nom_cand: string;
-    inf_pro: string;
+    des_pro: string;
     pub_pro: string;
     nom_pro: string;
 }
@@ -48,7 +48,7 @@ const EditModal: React.FC<EditModalProps> = ({ propuesta, onUpdate, onClose }) =
                         Información:
                         <textarea
                             name="inf_pro"
-                            value={formState.inf_pro}
+                            value={formState.des_pro}
                             onChange={handleChange}
                         ></textarea>
                     </label>
