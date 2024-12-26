@@ -1,15 +1,18 @@
-import { useEffect, useState } from 'react'
-import { Mary, Sara } from '../../util/data';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import styles from './Card.module.css'
+import { Partido } from '../../util/models/PartidoModel';
 
 interface CardProps {
     isLocked?: boolean
-    handleLock: () => void
+    handleLock: () => void,
+    partido: Partido
 }
 
 const Card = ({
-    isLocked = false, handleLock
+    isLocked = false, 
+    handleLock,
+    partido
 }: CardProps) => {
     const [chosen, setChosen] = useState<boolean>(false)
     const algo = true
@@ -37,15 +40,13 @@ const Card = ({
     useEffect(() => {
     }, [])
 
-    const candidato = algo ? Sara : Mary
-
     return (
         <section className={styles.card} style={{
             backgroundImage: bgImage
         }} >
             <header className={styles.cardHeader}>
-                {candidato.candidatos.map((candidato) => (
-                    <div className={styles.cardDelegadoCard} key={candidato.id}>
+                {partido.candidatos.map((candidato, index) => (
+                    <div className={styles.cardDelegadoCard} key={index}>
                         <img src={candidato.img} className={styles.cardImg} alt='Imagen del candidato' />
                         <div className={styles.cardInfo}>
                             <h2 className={styles.cardInfoH2}>{candidato.name}</h2>
@@ -57,7 +58,7 @@ const Card = ({
                 ))}
             </header>
             <div className={styles.eslogan}>
-                <p>{candidato.eslogan}</p>
+                <p>{partido.eslogan}</p>
             </div>
             <button className={buttonClass} onClick={handleVote}>
                 {isLocked

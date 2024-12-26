@@ -13,9 +13,25 @@ const Candidato = db.define('candidatos', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    cargo_can: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    img_can: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
     nom_can2: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    cargo_can2: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    img_can2: {
+        type: DataTypes.TEXT,
+        allowNull: false
     },
     eslogan_can: {
         type: DataTypes.TEXT,

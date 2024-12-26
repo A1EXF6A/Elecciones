@@ -34,7 +34,7 @@ const NavBar = ({ logged }: UserId) => {
             <div className={styles.navLogin}>
                 {
                     logged ?
-                        <Link to={`/user/`}>
+                        <Link to={`/admin/`}>
                             <button>
                                 Perfil
                             </button>

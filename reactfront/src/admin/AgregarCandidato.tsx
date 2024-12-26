@@ -1,4 +1,4 @@
-import { useState, useEffect, FC, useMemo } from 'react';
+import { useState, useEffect, FC, useMemo, useRef } from 'react';
 import { useField } from '../util/hooks/useField';
 import axios from 'axios';
 
@@ -18,9 +18,11 @@ const AgregarCandidato: FC = () => {
     const [tipoElecciones, setTipoElecciones] = useState<TipoEleccion[]>([]);
     const [idEleccion, setIdEleccion] = useState<number>(0);
     const [mensaje, setMensaje] = useState<string>('');
-    const { reset: resetCargo1, ...cargo1 } = useField('text', true)
-    const { reset: resetCargo2, ...cargo2 } = useField('text', true)
-    const { reset: resetCargo3, ...eslogan } = useField('text', true)
+    const { reset: resetNomCan, ...nomCan } = useField('text', true);
+    const { reset: resetNomCan2, ...nomCan2 } = useField('text', true);
+    const { reset: resetEslogan, ...eslogan } = useField('text', true);
+    const inputImgRef = useRef<HTMLInputElement>(null)
+    const inputImgRef2 = useRef<HTMLInputElement>(null)
 
     const cargos = useMemo(() => {
         if (idEleccion === 0) {
@@ -46,17 +48,24 @@ const AgregarCandidato: FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const img1 = await converToBase64(inputImgRef.current!)
+        const img2 = await converToBase64(inputImgRef2.current!)
+
         try {
             await axios.post('http://localhost:8000/api/candidatos/register', {
-                cargo1: cargo1.value,
-                cargo2: cargo2.value,
+                nomCan: nomCan.value,
+                cargoCan: cargos![0],
+                nomCan2: nomCan2.value,
+                cargoCan2: cargos![1],
                 id_eleccion: idEleccion,
-                eslogan: eslogan.value
+                eslogan: eslogan.value,
+                imgCan1: img1,
+                imgCan2: img2
             });
 
-            resetCargo1!()
-            resetCargo2!()
-            resetCargo3!()
+            resetNomCan!()
+            resetNomCan2!()
+            resetEslogan!()
 
             setIdEleccion(0);
             setMensaje('Candidato agregado correctamente!');
@@ -65,6 +74,17 @@ const AgregarCandidato: FC = () => {
             setMensaje('Hubo un error al agregar el candidato.');
         }
     };
+
+    const converToBase64 = (input: HTMLInputElement): Promise<string> => {
+        const file = input.files![0];
+
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = () => resolve(reader.result as string)
+            reader.onerror = (error) => reject(error);
+            reader.readAsDataURL(file)
+        })
+    }
 
     return (
         <div className="container">
@@ -92,16 +112,20 @@ const AgregarCandidato: FC = () => {
                         <div>
                             <label>Nombre completo del candidato a {cargos![0]}:</label>
                             <input
-                                {...cargo1}
+                                {...nomCan}
                                 required
                             />
+                            <label>Imagen del candidato:</label>
+                            <input type='file' accept='image/*' required ref={inputImgRef} />
                         </div>
                         <div>
                             <label>Nombre completo del candidato a {cargos![1]}:</label>
                             <input
-                                {...cargo2}
+                                {...nomCan2}
                                 required
                             />
+                            <label>Imagen del candidato:</label>
+                            <input type='file' accept='image/*' required ref={inputImgRef2} />
                         </div>
                         <div>
                             <label>Eslogan del candidato:</label>

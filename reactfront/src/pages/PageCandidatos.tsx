@@ -1,17 +1,29 @@
 import { useEffect, useState } from "react"
 import Card from "../components/candidatoCard/CandidatoCard"
+import { Config } from "../util/models/Config"
+import { Partido } from "../util/models/PartidoModel"
+import { getPartidos } from "../util/data"
 
 const CandidatosPage = () => {
     const [someChoose, setSomeChoose] = useState(false)
+    const [partidos, setPartidos] = useState<Partido[]>([])
 
     useEffect(() => {
+        fetchData()
+    }, [])
+
+    const fetchData = async () => {
         const stringConfig = localStorage.getItem('config')
 
         if (!stringConfig) return
 
-        const tipo = JSON.parse(stringConfig)
-        console.log(tipo.tipo_eleccion)
-    }, [])
+        const tipo = JSON.parse(stringConfig) as Config
+        const data = await getPartidos(tipo.tipo_eleccion)
+
+        if (data.partidos) {
+            setPartidos(data.partidos)
+        }
+    }
 
     const handleLock = () => {
         setSomeChoose(true)
@@ -20,14 +32,14 @@ const CandidatosPage = () => {
     return (
         <div className="cand">
             <div className="cand-cont">
-                <Card
-                    handleLock={handleLock}
-                    isLocked={someChoose}
-                />
-                <Card
-                    handleLock={handleLock}
-                    isLocked={someChoose}
-                />
+                {partidos.map((partido) => (
+                    <Card
+                        key={partido.id}
+                        partido={partido}
+                        handleLock={handleLock}
+                        isLocked={someChoose}
+                    />
+                ))}
             </div>
         </div>
     )

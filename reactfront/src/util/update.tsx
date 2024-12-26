@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const URI = "http://localhost:8000/users/";
-
 const updateVote = async (id_use: number, vot_use: string): Promise<{ success: boolean }> => {
+    const URI = "http://localhost:8000/users/";
+
     const userData = {
         vot_use: vot_use
     }
