@@ -10,11 +10,7 @@ const TipoEleccion = db.define('tipo_eleccion', {
     nombre_eleccion: {
         type: DataTypes.STRING,
         allowNull: false,
-    },
-    descripcion: { // Nueva columna
-        type: DataTypes.TEXT, // Usa TEXT si esperas descripciones largas
-        allowNull: false,
-    },
+    }
 }, {
     tableName: 'tipo_eleccion',
     timestamps: false,

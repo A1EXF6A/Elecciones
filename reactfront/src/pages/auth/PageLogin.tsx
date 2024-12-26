@@ -1,19 +1,14 @@
 import { FormEvent, useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useField } from '../../util/hooks/useField';
 import { loginAdmin } from '../../util/auth';
 
 import clsx from 'clsx';
 
-// interface OnLogin {
-//     handleOnLogin: (userId: string, vote: string) => void
-// }
-
 interface OnLoginAdmin {
     handleOnLoginAdmin: (id: string) => void
 }
 
-// const Login = ({ handleOnLogin }: OnLoginAdmin) => {
 const Login = ({ handleOnLoginAdmin }: OnLoginAdmin) => {
     const { state } = useParams()
     const newRegister = state === 'success'
@@ -37,24 +32,8 @@ const Login = ({ handleOnLoginAdmin }: OnLoginAdmin) => {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault()
-        // handleLogin()
         handleLoginAdmin()
     }
-
-    // const handleLogin = async () => {
-    //     const { success, data } = await loginUser({
-    //         credential: userCredential.value,
-    //         password: password.value
-    //     })
-
-    //     setfailLogin(!success)
-
-    //     if (success) {
-    //         const userId = String(data?.id_use)
-    //         const voteId = String(data?.vot_use)
-    //         handleOnLogin(userId, voteId)
-    //     }
-    // }
 
     const handleLoginAdmin = async () => {
         const { success, data } = await loginAdmin({
@@ -105,9 +84,6 @@ const Login = ({ handleOnLoginAdmin }: OnLoginAdmin) => {
 
                     <input className='cont-form-submit' type="submit" value="Iniciar sesión" />
                 </form>
-                <div className="cont-link">
-                    <span>¿No tienes cuenta?</span> <Link to={'/register'}>Regístrate</Link>
-                </div>
             </div>
 
         </section>

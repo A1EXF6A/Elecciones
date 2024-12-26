@@ -11,7 +11,6 @@ import eventos from './routes/eventoRouters.js';
 dotenv.config();
 const app = express();
 
-// Configuración de CORS más específica
 app.use(cors());
 
 app.use(express.json());
@@ -20,7 +19,6 @@ app.use('/api/tipoEleccion', tipoEleccionRoutes);
 app.use('/api/candidatos', candidatoRoutes);
 app.use('/api/propuestas', routerPro);
 app.use('/api/administradores', adminRouter);
-// app.use('/api/eventos', eventos);
 app.use('/api/eventos', eventos);
 
 
@@ -33,11 +31,7 @@ const PORT = process.env.PORT;
 try {
     await db.authenticate();
     console.log('Conexión establecida con la base de datos');
-
-    // Sincronizar modelos con la base de datos
-    await db.sync();
-    console.log('Modelos sincronizados con la base de datos');
-
+    
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);
     });

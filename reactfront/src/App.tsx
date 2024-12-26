@@ -2,7 +2,6 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import { NavBar } from './components/navbar/NavBar'
 import { CandidatosPage } from './pages/PageCandidatos'
 import { Login } from './pages/auth/PageLogin'
-import { Register } from './pages/auth/PageRegister'
 import { UserPage } from './pages/PageUser'
 import { useEffect, useState } from 'react'
 import { SugerenciaForm } from './pages/SugerenciasPage'
@@ -59,13 +58,11 @@ function App() {
                     <Route path='/' element={<Home />} />
                     <Route path='/candidatos' element={<CandidatosPage />} />
                     <Route path='/login/:state' element={<Login handleOnLoginAdmin={onLoginAdmin} />} />
-                    <Route path='/register' element={<Register />} />
                     <Route path='/user/' element={<UserPage handleOnLogout={onLogout} />} />
                     <Route path='/propuestas' element={<CompShowPropuestas />} />
                     <Route path='/sugerencias' element={<SugerenciaForm />} />
                     <Route path='/eventos/' element={<NewsPage />} />
-                   <Route path='/admin/' element={<HomeAdmin />} />
-
+                    <Route path='/admin/' element={<HomeAdmin />} />
                 </Routes>
             </main>
         </>

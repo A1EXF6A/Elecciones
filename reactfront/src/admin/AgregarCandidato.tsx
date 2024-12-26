@@ -1,22 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, FC, useMemo } from 'react';
+import { useField } from '../util/hooks/useField';
 import axios from 'axios';
+
 
 interface TipoEleccion {
     id_eleccion: number;
     nombre_eleccion: string;
 }
 
-const AgregarCandidato: React.FC = () => {
-    const [tipoElecciones, setTipoElecciones] = useState<TipoEleccion[]>([]);
-    const [nom1, setNom1] = useState<string>('');
-    const [nom2, setNom2] = useState<string>('');
-    const [ape1, setApe1] = useState<string>('');
-    const [ape2, setApe2] = useState<string>('');
-    const [idEleccion, setIdEleccion] = useState<number | null>(null);
-    const [cargo, setCargo] = useState<string>('');
-    const [mensaje, setMensaje] = useState<string>('');
+const cargosStrings = {
+    presidencial: ['Presidente', 'Vicepresidente'],
+    provincial: ['Gobernador', 'Prefecto'],
+    universidad: ['Rector', 'Vicerrector']
+}
 
-    // Cargar tipos de elección
+const AgregarCandidato: FC = () => {
+    const [tipoElecciones, setTipoElecciones] = useState<TipoEleccion[]>([]);
+    const [idEleccion, setIdEleccion] = useState<number>(0);
+    const [mensaje, setMensaje] = useState<string>('');
+    const { reset: resetCargo1, ...cargo1 } = useField()
+    const { reset: resetCargo2, ...cargo2 } = useField()
+    const { reset: resetCargo3, ...eslogan } = useField()
+
+    const cargos = useMemo(() => {
+        if (idEleccion === 0) {
+            return null
+        }
+
+        if (idEleccion === 1) return cargosStrings.provincial
+        else if (idEleccion === 2) return cargosStrings.universidad
+        else return cargosStrings.presidencial
+    }, [idEleccion])
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -33,26 +48,20 @@ const AgregarCandidato: React.FC = () => {
         e.preventDefault();
         try {
             await axios.post('http://localhost:8000/api/candidatos/register', {
-                nom1,
-                nom2,
-                ape1,
-                ape2,
+                cargo1: cargo1.value,
+                cargo2: cargo2.value,
                 id_eleccion: idEleccion,
-                cargo,
+                eslogan: eslogan.value
             });
 
-            // Mensaje de éxito
+            resetCargo1()
+            resetCargo2()
+            resetCargo3()
+
+            setIdEleccion(0);
             setMensaje('Candidato agregado correctamente!');
-            // Limpiar el formulario
-            setNom1('');
-            setNom2('');
-            setApe1('');
-            setApe2('');
-            setIdEleccion(null);
-            setCargo('');
         } catch (error) {
             console.error('Error al agregar candidato:', error);
-            // Mensaje de error
             setMensaje('Hubo un error al agregar el candidato.');
         }
     };
@@ -62,53 +71,15 @@ const AgregarCandidato: React.FC = () => {
             <h3>Agregar Candidato</h3>
 
             <form onSubmit={handleSubmit}>
-                {/* Nombre */}
-                <div>
-                    <label>Primer Nombre:</label>
-                    <input
-                        type="text"
-                        value={nom1}
-                        onChange={(e) => setNom1(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Segundo Nombre:</label>
-                    <input
-                        type="text"
-                        value={nom2}
-                        onChange={(e) => setNom2(e.target.value)}
-                    />
-                </div>
-
-                {/* Apellido */}
-                <div>
-                    <label>Primer Apellido:</label>
-                    <input
-                        type="text"
-                        value={ape1}
-                        onChange={(e) => setApe1(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Segundo Apellido:</label>
-                    <input
-                        type="text"
-                        value={ape2}
-                        onChange={(e) => setApe2(e.target.value)}
-                    />
-                </div>
-
-                {/* Elección */}
                 <div>
                     <label>Elección:</label>
                     <select
                         value={idEleccion ?? ''}
                         onChange={(e) => setIdEleccion(Number(e.target.value))}
                         required
+                        style={styles.combo}
                     >
-                        <option value="">Seleccione una elección</option>
+                        <option value='0'>Seleccione un tipo</option>
                         {tipoElecciones.map((eleccion) => (
                             <option key={eleccion.id_eleccion} value={eleccion.id_eleccion}>
                                 {eleccion.nombre_eleccion}
@@ -116,22 +87,33 @@ const AgregarCandidato: React.FC = () => {
                         ))}
                     </select>
                 </div>
-
-                {/* Cargo */}
-                <div>
-                    <label>Cargo:</label>
-                    <input
-                        type="text"
-                        value={cargo}
-                        onChange={(e) => setCargo(e.target.value)}
-                        required
-                    />
-                </div>
-
-                <button type="submit">Agregar Candidato</button>
+                {idEleccion !== 0 ? (
+                    <>
+                        <div>
+                            <label>Nombre completo del candidato a {cargos![0]}:</label>
+                            <input
+                                {...cargo1}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label>Nombre completo del candidato a {cargos![1]}:</label>
+                            <input
+                                {...cargo2}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label>Eslogan del candidato:</label>
+                            <input
+                                {...eslogan}
+                                required
+                            />
+                        </div>
+                        <button type="submit">Agregar Candidato</button>
+                    </>
+                ) : null}
             </form>
-
-            {/* Mostrar mensaje de éxito o error */}
             {mensaje && (
                 <div className={`mensaje ${mensaje.includes('correctamente') ? 'exito' : 'error'}`}>
                     {mensaje}
@@ -140,5 +122,11 @@ const AgregarCandidato: React.FC = () => {
         </div>
     );
 };
+
+const styles: { [key: string]: React.CSSProperties } = {
+    combo: {
+        padding: '.5rem'
+    }
+}
 
 export default AgregarCandidato;

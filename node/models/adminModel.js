@@ -15,7 +15,7 @@ const Admin = db.define('administrador', {
         type: DataTypes.TEXT(255),
     }
 }, {
-    tableName: 'administrador', 
+    tableName: 'administradores', 
     timestamps: false,
 });
 
