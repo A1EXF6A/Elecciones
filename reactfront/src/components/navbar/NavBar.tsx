@@ -3,10 +3,10 @@ import LogoUta from '/assets/logouta.svg'
 import styles from './NavBar.module.css'
 
 interface UserId {
-    userId?: string
+    logged?: boolean
 }
 
-const NavBar = ({ userId }: UserId) => {
+const NavBar = ({ logged }: UserId) => {
     return (
         <nav className={styles.nav}>
             <ul className={styles.navPages}>
@@ -23,6 +23,9 @@ const NavBar = ({ userId }: UserId) => {
                 <NavLink to={'/eventos'} className={({ isActive }) => isActive ? styles.navPageActive : ''}>
                     <li>Eventos</li>
                 </NavLink>
+                <NavLink to={'/eventos'} className={({ isActive }) => isActive ? styles.navPageActive : ''}>
+                    <li>Noticias</li>
+                </NavLink>
                 <NavLink to={'/sugerencias'} className={({ isActive }) => isActive ? styles.navPageActive : ''}>
                     <li>Dejanos tus sugerencias</li>
                 </NavLink>
@@ -30,12 +33,13 @@ const NavBar = ({ userId }: UserId) => {
             <div className={styles.navSeparator} />
             <div className={styles.navLogin}>
                 {
-                    userId ? <Link to={`/user/`}>
-                        <button>
-                            Perfil
-                        </button>
-                    </Link>
-                        : <Link to={'/login/new'}>
+                    logged ?
+                        <Link to={`/user/`}>
+                            <button>
+                                Perfil
+                            </button>
+                        </Link> :
+                        <Link to={'/login/new'}>
                             <button>Iniciar sesión</button>
                         </Link>
                 }

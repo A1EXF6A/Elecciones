@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react"
 
-const useField = (type: string = 'text') => {
+const useField = (type: string = 'text', needReset: boolean = false) => {
     const [value, setValue] = useState<string>('')
 
     const reset = () => {
@@ -11,11 +11,17 @@ const useField = (type: string = 'text') => {
         setValue((e.target as HTMLInputElement).value)
     }
 
+    if (!needReset) return {
+        type,
+        value,
+        onChange
+    }
+
     return {
+        reset,
         type,
         value,
         onChange,
-        reset
     }
 }
 

@@ -6,7 +6,7 @@ import { loginAdmin } from '../../util/auth';
 import clsx from 'clsx';
 
 interface OnLoginAdmin {
-    handleOnLoginAdmin: (id: string) => void
+    handleOnLoginAdmin: () => void
 }
 
 const Login = ({ handleOnLoginAdmin }: OnLoginAdmin) => {
@@ -15,7 +15,7 @@ const Login = ({ handleOnLoginAdmin }: OnLoginAdmin) => {
 
     const [failLogin, setfailLogin] = useState(false)
 
-    const userCredential = useField('text')
+    const userCredential = useField()
     const password = useField('password')
 
     const navigateTo = useNavigate()
@@ -36,7 +36,7 @@ const Login = ({ handleOnLoginAdmin }: OnLoginAdmin) => {
     }
 
     const handleLoginAdmin = async () => {
-        const { success, data } = await loginAdmin({
+        const { success } = await loginAdmin({
             userName: userCredential.value,
             password: password.value
         })
@@ -44,8 +44,7 @@ const Login = ({ handleOnLoginAdmin }: OnLoginAdmin) => {
         setfailLogin(!success)
 
         if (success) {
-            const userId = String(data?.id)
-            handleOnLoginAdmin(userId!)
+            handleOnLoginAdmin()
         }
     }
 

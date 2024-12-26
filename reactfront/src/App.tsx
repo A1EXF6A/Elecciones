@@ -14,45 +14,41 @@ import HomeAdmin from './admin/HomeAdmin'
 
 
 function App() {
-    const [userId, setUserId] = useState<string>('')
+    const [isLoggued, setIsLogged] = useState<boolean>(false)
     const navigateTo = useNavigate()
 
-    // const onLogin = (userId: string, vote: string) => {
-    //     setUserId(userId)
-    //     localStorage.setItem('userId', userId)
-    //     localStorage.setItem('vote', vote)
-    // }
-
-    const onLoginAdmin = (id: string) => {
-        setUserId(id)
-        localStorage.setItem('adminId', id)
+    const onLoginAdmin = () => {
+        localStorage.setItem('loggued', 'true')
         navigateTo('/admin/')
+        setIsLogged(true)
     }
 
     const onLogout = () => {
-        setUserId('')
-        localStorage.removeItem('userId')
-        localStorage.removeItem('vote')
+        setIsLogged(false)
+        localStorage.removeItem('loggued')
         navigateTo('/login/new')
     }
 
-    // useEffect(() => {
-    //     const userId = localStorage.getItem('userId')
-    //     if (userId) {
-    //         setUserId(userId)
-    //     }
-    // }, [])
-
     useEffect(() => {
-        const userId = localStorage.getItem('adminId')
-        if (userId) {
-            setUserId(userId)
+        const loggued = localStorage.getItem('loggued')
+        setIsLogged(!!loggued)
+
+
+        const tipo = localStorage.getItem('config')
+        if (!tipo) {
+            console.log('configuracion creada')
+            const configObject = {
+                tipo_eleccion: 2
+            }
+
+
+            localStorage.setItem('config', JSON.stringify(configObject));
         }
     }, [])
 
     return (
         <>
-            <NavBar userId={userId} />
+            <NavBar logged={isLoggued} />
             <main>
                 <Routes>
                     <Route path='/' element={<Home />} />

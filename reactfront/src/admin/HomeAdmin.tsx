@@ -5,6 +5,7 @@ import AgregarPropuestas from "./AgregarPropuestas";
 import AgregarCandidato from "./AgregarCandidato";
 import AgregarEvento from "./AgregarEvento";
 import CompShowPropuestas from "../pages/propuestas/Propuestas";
+import ConfigPage from "../pages/ConfigPage";
 
 interface Funcionalidad {
     id: number;
@@ -21,6 +22,8 @@ const AdminPanel: React.FC = () => {
         { id: 3, nombre: "Ver propuestas", descripcion: "Permite desactivar propuestas cambiando su estado a 'Inactiva'."  },
         { id: 4, nombre: "Ver resultados de los votos", descripcion: "Permite ver los resultados de votos por lista."  },
         { id: 5, nombre: "Agregar evento", descripcion: "Permite añadir un nuevo evento al sistema." },
+        { id: 6, nombre: "Agregar noticia", descripcion: "Permite añadir un nuevo evento al sistema." },
+        { id: 7, nombre: "Configuración de la página", descripcion: "Permite añadir un nuevo evento al sistema." },
     ];
 
     const handleMenuClick = (nombre: string) => {
@@ -88,6 +91,11 @@ const AdminPanel: React.FC = () => {
                         {selectedOption === "Agregar evento" && (
                             <div>
                                 <AgregarEvento />
+                            </div>
+                        )}
+                        {selectedOption === "Configuración de la página" && (
+                            <div>
+                                <ConfigPage />
                             </div>
                         )}
                     </div>

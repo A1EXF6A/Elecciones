@@ -18,9 +18,9 @@ const AgregarCandidato: FC = () => {
     const [tipoElecciones, setTipoElecciones] = useState<TipoEleccion[]>([]);
     const [idEleccion, setIdEleccion] = useState<number>(0);
     const [mensaje, setMensaje] = useState<string>('');
-    const { reset: resetCargo1, ...cargo1 } = useField()
-    const { reset: resetCargo2, ...cargo2 } = useField()
-    const { reset: resetCargo3, ...eslogan } = useField()
+    const { reset: resetCargo1, ...cargo1 } = useField('text', true)
+    const { reset: resetCargo2, ...cargo2 } = useField('text', true)
+    const { reset: resetCargo3, ...eslogan } = useField('text', true)
 
     const cargos = useMemo(() => {
         if (idEleccion === 0) {
@@ -54,9 +54,9 @@ const AgregarCandidato: FC = () => {
                 eslogan: eslogan.value
             });
 
-            resetCargo1()
-            resetCargo2()
-            resetCargo3()
+            resetCargo1!()
+            resetCargo2!()
+            resetCargo3!()
 
             setIdEleccion(0);
             setMensaje('Candidato agregado correctamente!');
