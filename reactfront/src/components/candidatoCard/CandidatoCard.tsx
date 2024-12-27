@@ -1,25 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import styles from './Card.module.css'
 import { Partido } from '../../util/models/PartidoModel';
+import { VotoContext } from '../../pages/PageCandidatos';
 
 interface CardProps {
     isLocked?: boolean
     handleLock: () => void,
-    partido: Partido
+    partido: Partido,
+    idPartido: number
 }
 
 const Card = ({
     isLocked = false, 
     handleLock,
-    partido
+    partido,
+    idPartido
 }: CardProps) => {
     const [chosen, setChosen] = useState<boolean>(false)
-    const algo = true
-
-    const bgImage: string = algo
-        ? 'url("/assets/bg1.svg")'
-        : 'url("/assets/bg2.svg")'
+    const { openModal, idPartido: partidoId } = useContext(VotoContext)
 
     const buttonText: string = chosen
         ? "Elegido"
@@ -31,18 +30,22 @@ const Card = ({
     })
 
     const handleVote = () => {
-        if (isLocked) return
+        if (isLocked || chosen) return
 
         setChosen(!chosen)
         handleLock()
+        openModal(idPartido)
     }
 
     useEffect(() => {
-    }, [])
+        if (partidoId === idPartido) {
+            setChosen(true)
+        }
+    } , [partidoId, idPartido])
 
     return (
         <section className={styles.card} style={{
-            backgroundImage: bgImage
+            backgroundImage: 'url("/assets/bg2.svg")'
         }} >
             <header className={styles.cardHeader}>
                 {partido.candidatos.map((candidato, index) => (
@@ -61,15 +64,13 @@ const Card = ({
                 <p>{partido.eslogan}</p>
             </div>
             <button className={buttonClass} onClick={handleVote}>
-                {isLocked
-                    ? <svg className='bi' width='32' height='32' fill='currentColor'>
+                {isLocked && !chosen
+                    ? 
+                    <svg className='bi' width='32' height='32' fill='currentColor'>
                         <use href='/assets/icons.svg#lock'></use>
-                    </svg>
-                    : <span className={styles.cardButtonText}>{buttonText}</span>
+                    </svg>:
+                    <span className={styles.cardButtonText}>{buttonText}</span>
                 }
-                <span className={styles.cardButtonChangeVote}>
-                    Cambiar voto
-                </span>
             </button>
         </section >
     )

@@ -1,17 +1,17 @@
-import axios from "axios";
+import axios from 'axios';
 
-const updateVote = async (id_use: number, vot_use: string): Promise<{ success: boolean }> => {
-    const URI = "http://localhost:8000/users/";
+const URI = 'http://localhost:8000/api/candidatos/vote';
 
-    const userData = {
-        vot_use: vot_use
+const updateVote = async (partido_id: number): Promise<{ success: boolean }> => {
+    const voteData = {
+        partido_id: partido_id
     }
 
     try {
-        const { data } = await axios.put<{
+        const { data } = await axios.post<{
             success: boolean,
             message: string
-        }>(`${URI}${id_use}`, userData)
+        }>(URI, voteData);
 
         if (!data.success) {
             throw new Error(data.message);

@@ -1,8 +1,6 @@
-// controllers/candidatoController.js
 import Candidato from '../models/Candidatos.js';
-import TipoEleccion from '../models/TipoEleccion.js';
 
-export const getCandidatosPorTipo = async (req, res) => {
+const   getCandidatosPorTipo = async (req, res) => {
     try {
         const { tipoId } = req.params;
         const candidatos = await Candidato.findAll({
@@ -10,12 +8,27 @@ export const getCandidatosPorTipo = async (req, res) => {
         });
         res.json({success: true, data: candidatos});
     } catch (error) {
-        console.error('Error al obtener los candidatos:', error);
         res.status(500).json({success: false, message: 'Error al obtener los candidatos' });
     }
 };
 
-export const registerCandidato = async (req, res) => {
+const registerVote = async (req, res) => {
+    try {
+        const { partido_id } = req.body;
+        const candidato = await Candidato.findByPk(partido_id);
+        if (!candidato) {
+            return res.status(404).json({ success: false, message: 'Candidato no encontrado' });
+        }
+
+        candidato.num_votos = candidato.num_votos + 1;
+        await candidato.save();
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error al votar por el candidato' });
+    }
+};
+
+const registerCandidato = async (req, res) => {
     try {
         const { nomCan, cargoCan, nomCan2, cargoCan2, id_eleccion, eslogan, imgCan1, imgCan2 } = req.body;
         const newCandidato = await Candidato.create({
@@ -35,4 +48,5 @@ export const registerCandidato = async (req, res) => {
     }
 }
 
+export { getCandidatosPorTipo, registerCandidato, registerVote}
 

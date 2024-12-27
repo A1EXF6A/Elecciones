@@ -30,7 +30,6 @@ function App() {
 
         const tipo = localStorage.getItem('config')
         if (!tipo) {
-            console.log('configuracion creada')
             const configObject: Config = {
                 tipo_eleccion: 2
             }

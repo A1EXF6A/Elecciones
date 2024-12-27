@@ -7,6 +7,7 @@
 }
 
 .card {
+    position: relative;
     display: grid;
     grid-template-rows: auto 1fr 1fr;
     gap: 10px;
@@ -19,6 +20,17 @@
 
     padding: 30px 80px;
     color: white;
+}
+
+.card:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 2px;
+    background-color: rgb(255, 255, 255);
 }
 
 .cardHeader {
@@ -111,16 +123,4 @@
 
 .cardButton.isLocked {
     background-color: rgb(32, 5, 7);
-}
-
-.cardButtonChangeVote {
-    display: none;
-}
-
-.cardButton.isChoose:hover .cardButtonChangeVote {
-    display: inline;
-}
-
-.cardButton.isChoose:hover .cardButtonText {
-    display: none;
 }
