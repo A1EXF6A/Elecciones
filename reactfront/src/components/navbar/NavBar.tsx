@@ -1,14 +1,28 @@
 import { Link, NavLink } from "react-router-dom"
 import LogoUta from '/assets/logouta.svg'
 import styles from './NavBar.module.css'
+import { Config } from "../../util/models/Config"
+import { useEffect, useState } from "react"
 
 interface UserId {
     logged?: boolean
 }
 
 const NavBar = ({ logged }: UserId) => {
+    const [color, setColor] = useState<string>('#333')
+
+    useEffect(() => {
+        const config = localStorage.getItem('config')
+
+        if (config) {
+            const configObject = JSON.parse(config) as Config
+            setColor(configObject.navbar_color)
+            console.log(configObject)
+        }
+    }, [])
+
     return (
-        <nav className={styles.nav}>
+        <nav className={styles.nav} style={{ '--clr': color } as React.CSSProperties}>
             <ul className={styles.navPages}>
                 <li><img src={LogoUta} alt="Logo UTA" className={styles.navLogoUTA} /></li>
                 <NavLink to={'/'} className={({ isActive }) => isActive ? styles.navPageActive : ''}>

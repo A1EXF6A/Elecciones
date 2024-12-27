@@ -30,3 +30,58 @@
     display: flex;
     gap: 20px;
 }
+
+.no-cand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 1.5rem;
+    color: #333;
+    height: calc(100vh - var(--height));
+}
+
+.chart-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.chart-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 20px;
+    width: 400px;
+    height: 400px;
+}
+
+.chart-labels {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chart-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.chart-label-color {
+    width: 20px;
+    height: 20px;
+    background-color: var(--clr);
+}
+
+.ct-label {
+    font-size: 2rem;
+    font-weight: 500;
+    fill: white;
+}
+
+.ct-slice-pie {
+    fill: var(--clr);
+}
+

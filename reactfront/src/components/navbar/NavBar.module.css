@@ -3,7 +3,7 @@
 }
 
 .nav {
-    background-color: #333;
+    background-color: var(--clr);
     position: fixed;
     top: 0;
     width: 100vw;

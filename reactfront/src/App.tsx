@@ -28,10 +28,11 @@ function App() {
         setIsLogged(!!loggued)
 
 
-        const tipo = localStorage.getItem('config')
-        if (!tipo) {
+        const config = localStorage.getItem('config')
+        if (!config) {
             const configObject: Config = {
-                tipo_eleccion: 2
+                tipo_eleccion: 2,
+                navbar_color: '#333'
             }
 
             localStorage.setItem('config', JSON.stringify(configObject));

@@ -12,6 +12,7 @@ type CandidatoEnCrudo = {
     cargo_can2: string,
     img_can2: string,
     eslogan_can: string,
+    num_votos: number
 }
 
 const getPartidos = async (tipo_eleccion: number): Promise<{ partidos: Partido[] | null }> => {
@@ -41,7 +42,8 @@ const getPartidos = async (tipo_eleccion: number): Promise<{ partidos: Partido[]
                         cargo: candidato.cargo_can2
                     },
                 ],
-                eslogan: candidato.eslogan_can
+                eslogan: candidato.eslogan_can,
+                num_votos: candidato.num_votos
             }
             return partido
         })

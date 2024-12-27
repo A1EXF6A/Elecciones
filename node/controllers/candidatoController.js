@@ -1,14 +1,14 @@
 import Candidato from '../models/Candidatos.js';
 
-const   getCandidatosPorTipo = async (req, res) => {
+const getCandidatosPorTipo = async (req, res) => {
     try {
         const { tipoId } = req.params;
         const candidatos = await Candidato.findAll({
             where: { id_eleccion: tipoId }
         });
-        res.json({success: true, data: candidatos});
+        res.json({ success: true, data: candidatos });
     } catch (error) {
-        res.status(500).json({success: false, message: 'Error al obtener los candidatos' });
+        res.status(500).json({ success: false, message: 'Error al obtener los candidatos' });
     }
 };
 
@@ -41,10 +41,10 @@ const registerCandidato = async (req, res) => {
             eslogan_can: eslogan,
             id_eleccion: id_eleccion,
         });
-        
+
         res.json(newCandidato);
     } catch (error) {
-        res.status(500).json({ error: 'Error al registrar el candidato' + error});
+        res.status(500).json({ error: 'Error al registrar el candidato' + error });
     }
 }
 

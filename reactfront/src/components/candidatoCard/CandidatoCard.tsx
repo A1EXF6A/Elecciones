@@ -6,14 +6,12 @@ import { VotoContext } from '../../pages/PageCandidatos';
 
 interface CardProps {
     isLocked?: boolean
-    handleLock: () => void,
     partido: Partido,
     idPartido: number
 }
 
 const Card = ({
     isLocked = false, 
-    handleLock,
     partido,
     idPartido
 }: CardProps) => {
@@ -32,15 +30,16 @@ const Card = ({
     const handleVote = () => {
         if (isLocked || chosen) return
 
-        setChosen(!chosen)
-        handleLock()
         openModal(idPartido)
     }
 
     useEffect(() => {
         if (partidoId === idPartido) {
             setChosen(true)
+        } else {
+            setChosen(false)
         }
+        
     } , [partidoId, idPartido])
 
     return (

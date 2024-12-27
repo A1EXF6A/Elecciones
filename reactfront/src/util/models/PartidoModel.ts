@@ -7,7 +7,8 @@ type Candidato = {
 type Partido = {
     id: number,
     candidatos: Candidato[],
-    eslogan: string
+    eslogan: string,
+    num_votos: number
 }
 
 export type { Partido }

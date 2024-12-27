@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import AgregarPropuestas from "./AgregarPropuestas";
@@ -6,6 +6,7 @@ import AgregarCandidato from "./AgregarCandidato";
 import AgregarEvento from "./AgregarEvento";
 import CompShowPropuestas from "../pages/propuestas/Propuestas";
 import ConfigPage from "../pages/ConfigPage";
+import ResultadosPage from "../pages/ResultadosPage";
 
 interface Funcionalidad {
     id: number;
@@ -14,13 +15,13 @@ interface Funcionalidad {
 }
 
 const AdminPanel: React.FC = () => {
-    const [selectedOption, setSelectedOption] = useState<string>("");
+    const [selectedOption, setSelectedOption] = useState<string>("Configuración de la página" );
 
     const funcionalidades: Funcionalidad[] = [
-        { id: 1, nombre: "Agregar candidatos", descripcion: "Permite agregar candidatos a una lista y asignarles un cargo específico."  },
-        { id: 2, nombre: "Agregar propuestas", descripcion: "Permite asignar propuestas a los candidatos."  },
-        { id: 3, nombre: "Ver propuestas", descripcion: "Permite desactivar propuestas cambiando su estado a 'Inactiva'."  },
-        { id: 4, nombre: "Ver resultados de los votos", descripcion: "Permite ver los resultados de votos por lista."  },
+        { id: 1, nombre: "Agregar candidatos", descripcion: "Permite agregar candidatos a una lista y asignarles un cargo específico." },
+        { id: 2, nombre: "Agregar propuestas", descripcion: "Permite asignar propuestas a los candidatos." },
+        { id: 3, nombre: "Ver propuestas", descripcion: "Permite desactivar propuestas cambiando su estado a 'Inactiva'." },
+        { id: 4, nombre: "Ver resultados de los votos", descripcion: "Permite ver los resultados de votos por lista." },
         { id: 5, nombre: "Agregar evento", descripcion: "Permite añadir un nuevo evento al sistema." },
         { id: 6, nombre: "Agregar noticia", descripcion: "Permite añadir un nuevo evento al sistema." },
         { id: 7, nombre: "Configuración de la página", descripcion: "Permite añadir un nuevo evento al sistema." },
@@ -83,10 +84,7 @@ const AdminPanel: React.FC = () => {
                             </div>
                         )}
                         {selectedOption === "Ver resultados de los votos" && (
-                            <div>
-                                <h3>Ver resultados de los votos</h3>
-                                <p>Aquí podrás ver los resultados de votos por lista.</p>
-                            </div>
+                            <ResultadosPage />
                         )}
                         {selectedOption === "Agregar evento" && (
                             <div>
