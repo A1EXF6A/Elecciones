@@ -37,7 +37,7 @@ const NavBar = ({ logged }: UserId) => {
                 <NavLink to={'/eventos'} className={({ isActive }) => isActive ? styles.navPageActive : ''}>
                     <li>Eventos</li>
                 </NavLink>
-                <NavLink to={'/eventos'} className={({ isActive }) => isActive ? styles.navPageActive : ''}>
+                <NavLink to={'/noticias'} className={({ isActive }) => isActive ? styles.navPageActive : ''}>
                     <li>Noticias</li>
                 </NavLink>
                 <NavLink to={'/sugerencias'} className={({ isActive }) => isActive ? styles.navPageActive : ''}>
@@ -49,9 +49,7 @@ const NavBar = ({ logged }: UserId) => {
                 {
                     logged ?
                         <Link to={`/admin/`}>
-                            <button>
-                                Perfil
-                            </button>
+                            <button>Perfil</button>
                         </Link> :
                         <Link to={'/login/new'}>
                             <button>Iniciar sesión</button>

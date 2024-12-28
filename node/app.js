@@ -3,10 +3,11 @@ import express from 'express';
 import cors from 'cors';
 import db from './database/db.js';
 import tipoEleccionRoutes from './routes/tipoEleccionRoutes.js';
-import candidatoRoutes from './routes/candidatoRouters.js';
-import routerPro from './routes/propuestaRoutes.js';
+import candidatoRoutes from './routes/candidatoRouter.js';
+import routerPro from './routes/propuestaRouter.js';
 import adminRouter from './routes/adminRouter.js';
-import eventos from './routes/eventoRouters.js';
+import eventos from './routes/eventoRouter.js';
+import routerNoticias from './routes/newsRouter.js';
 
 dotenv.config();
 const app = express();
@@ -20,6 +21,7 @@ app.use('/api/candidatos', candidatoRoutes);
 app.use('/api/propuestas', routerPro);
 app.use('/api/administradores', adminRouter);
 app.use('/api/eventos', eventos);
+app.use('/api/noticias', routerNoticias);
 
 
 app.get('/test', (req, res) => {

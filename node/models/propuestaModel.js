@@ -7,7 +7,11 @@ const Propuesta = db.define('propuesta', {
         primaryKey: true,
         autoIncrement: true,
     },
-    nom_pro: {
+    id_cand: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    titulo_pro: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -15,13 +19,14 @@ const Propuesta = db.define('propuesta', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    publico: {
+    publico_pro: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    id_cand: {
+    favorita: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
     },
 }, {
     tableName: 'propuestas', 

@@ -11,6 +11,7 @@ import { NewsPage } from './pages/NewsPage'
 import HomeAdmin from './admin/HomeAdmin'
 import { Config } from './util/models/Config'
 import './styles/app.css'
+import NoticiasPage from './pages/NoticiasPage'
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
                     <Route path='/propuestas' element={<CompShowPropuestas />} />
                     <Route path='/sugerencias' element={<SugerenciaForm />} />
                     <Route path='/eventos/' element={<NewsPage />} />
+                    <Route path='/noticias/' element={<NoticiasPage />} />
                     <Route path='/admin/' element={<HomeAdmin />} />
                 </Routes>
             </main>
