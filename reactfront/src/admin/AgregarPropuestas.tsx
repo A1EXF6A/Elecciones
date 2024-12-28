@@ -34,8 +34,10 @@ const Propuestas: React.FC = () => {
     const [nuevoPublico, setNuevoPublico] = useState<string>('');
     const [mostrarFormulario, setMostrarFormulario] = useState<boolean>(false);
 
+    const [paginaActual, setPaginaActual] = useState<number>(1);
+    const propuestasPorPagina = 5;
+
     useEffect(() => {
-        // Obtener tipos de elecciones
         const fetchTiposEleccion = async () => {
             try {
                 const response = await axios.get('http://localhost:8000/api/tipoEleccion');
@@ -50,7 +52,6 @@ const Propuestas: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        // Obtener propuestas
         const fetchPropuestas = async () => {
             try {
                 const response = await axios.get('http://localhost:8000/api/propuestas');
@@ -65,7 +66,6 @@ const Propuestas: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        // Obtener candidatos por tipo de elección
         const fetchCandidatos = async () => {
             if (filtroEleccion === null) {
                 setCandidatos([]);
@@ -124,7 +124,7 @@ const Propuestas: React.FC = () => {
             setNuevaDescripcion('');
             setNuevoPublico('');
             setFiltroCandidato(null);
-            setMostrarFormulario(false);  // Cerrar el formulario después de agregar
+            setMostrarFormulario(false);
         } catch (err) {
             console.error('Error al agregar la propuesta:', err);
             setError('No se pudo agregar la propuesta.');
@@ -136,12 +136,21 @@ const Propuestas: React.FC = () => {
         return true;
     });
 
+    const indexUltimaPropuesta = paginaActual * propuestasPorPagina;
+    const indexPrimeraPropuesta = indexUltimaPropuesta - propuestasPorPagina;
+    const propuestasPaginadas = propuestasFiltradas.slice(indexPrimeraPropuesta, indexUltimaPropuesta);
+
+    const totalPaginas = Math.ceil(propuestasFiltradas.length / propuestasPorPagina);
+
+    const cambiarPagina = (nuevaPagina: number) => {
+        setPaginaActual(nuevaPagina);
+    };
+
     return (
         <div className="container">
             <h1>Propuestas</h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
-            {/* Mostrar los filtros fuera del formulario */}
             <div className="filtros">
                 <label>
                     Filtrar por tipo de elección:
@@ -176,12 +185,10 @@ const Propuestas: React.FC = () => {
                 )}
             </div>
 
-            {/* Botón para mostrar el formulario */}
             <button className="btn-agregar" onClick={() => setMostrarFormulario(!mostrarFormulario)}>
                 {mostrarFormulario ? 'Cancelar' : 'Agregar Propuesta'}
             </button>
 
-            {/* Formularios */}
             {mostrarFormulario && (
                 <div className="formulario-contenedor">
                     <div className="mini-formulario">
@@ -220,26 +227,39 @@ const Propuestas: React.FC = () => {
                 </div>
             )}
 
-            {Array.isArray(propuestasFiltradas) && propuestasFiltradas.length > 0 ? (
-                <ul>
-                    {propuestasFiltradas.map((propuesta) => (
-                        <li key={propuesta.id_pro}>
-                            <h3>{propuesta.titulo_pro}</h3>
-                            <p>{propuesta.des_pro}</p>
-                            <p>
-                                <strong>Público:</strong> {propuesta.publico_pro}
-                            </p>
-                            <p>
-                                <strong>Favorita:</strong> {propuesta.favorita ? 'Sí' : 'No'}
-                            </p>
+            {propuestasPaginadas.length > 0 ? (
+                <>
+                    <ul>
+                        {propuestasPaginadas.map((propuesta) => (
+                            <li key={propuesta.id_pro}>
+                                <h3>{propuesta.titulo_pro}</h3>
+                                <p>{propuesta.des_pro}</p>
+                                <p>
+                                    <strong>Público:</strong> {propuesta.publico_pro}
+                                </p>
+                                <p>
+                                    <strong>Favorita:</strong> {propuesta.favorita ? 'Sí' : 'No'}
+                                </p>
+                                <button
+                                    onClick={() => cambiarFavorito(propuesta.id_pro, propuesta.favorita)}
+                                >
+                                    {propuesta.favorita ? 'Quitar de favoritos' : 'Marcar como favorita'}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="paginacion">
+                        {Array.from({ length: totalPaginas }, (_, i) => (
                             <button
-                                onClick={() => cambiarFavorito(propuesta.id_pro, propuesta.favorita)}
+                                key={i}
+                                onClick={() => cambiarPagina(i + 1)}
+                                className={paginaActual === i + 1 ? 'activo' : ''}
                             >
-                                {propuesta.favorita ? 'Quitar de favoritos' : 'Marcar como favorita'}
+                                {i + 1}
                             </button>
-                        </li>
-                    ))}
-                </ul>
+                        ))}
+                    </div>
+                </>
             ) : (
                 <p>No hay propuestas disponibles.</p>
             )}

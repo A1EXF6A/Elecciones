@@ -3,7 +3,7 @@ import { NavBar } from './components/navbar/NavBar'
 import { CandidatosPage } from './pages/PageCandidatos'
 import { Login } from './pages/auth/PageLogin'
 import { useEffect, useState } from 'react'
-import { SugerenciaForm } from './pages/SugerenciasPage'
+import SugerenciaForm from './pages/SugerenciasPage'
 import CompShowPropuestas from './admin/AgregarPropuestas'
 import { Home } from './pages/HomePage'
 
