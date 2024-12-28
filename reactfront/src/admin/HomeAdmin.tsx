@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import AgregarPropuestas from "./AgregarPropuestas";
 import AgregarCandidato from "./AgregarCandidato";
 import AgregarEvento from "./AgregarEvento";
-import CompShowPropuestas from "../pages/propuestas/Propuestas";
 import ConfigPage from "../pages/ConfigPage";
 import ResultadosPage from "../pages/ResultadosPage";
 import Sugerencias from "./sugerencias";
+import Noticias from "./noticias";
 
 interface Funcionalidad {
     id: number;
@@ -95,7 +95,7 @@ const AdminPanel: React.FC = () => {
                         )}
                         {selectedOption === "Administrar noticias" && (
                             <div>
-                                <AgregarEvento />
+                                <Noticias />
                             </div>
                         )}
                         {selectedOption === "Administrar sugerencias" && (
