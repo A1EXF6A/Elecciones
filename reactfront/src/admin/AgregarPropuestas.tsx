@@ -31,11 +31,14 @@ const Propuestas: React.FC = () => {
     const [filtroEleccion, setFiltroEleccion] = useState<number | null>(null);
     const [nuevoTitulo, setNuevoTitulo] = useState<string>('');
     const [nuevaDescripcion, setNuevaDescripcion] = useState<string>('');
-    const [nuevoPublico, setNuevoPublico] = useState<string>('');
+    const [nuevoPublico, setNuevoPublico] = useState<string[]>([]);
     const [mostrarFormulario, setMostrarFormulario] = useState<boolean>(false);
+    const [errorFormulario, setErrorFormulario] = useState<string | null>(null);
 
     const [paginaActual, setPaginaActual] = useState<number>(1);
     const propuestasPorPagina = 5;
+
+    const opcionesPublico = ['Estudiantes', 'Trabajadores', 'Empresarios', 'Desempleados', 'Jubilados', 'Universidades', 'Escuelas', 'Hospitales'];
 
     useEffect(() => {
         const fetchTiposEleccion = async () => {
@@ -104,17 +107,18 @@ const Propuestas: React.FC = () => {
     };
 
     const agregarPropuesta = async () => {
-        if (!filtroEleccion || !filtroCandidato || !nuevoTitulo || !nuevaDescripcion || !nuevoPublico) {
-            setError('Por favor complete todos los campos.');
+        if (!filtroEleccion || !filtroCandidato || !nuevoTitulo || !nuevaDescripcion || nuevoPublico.length === 0) {
+            setErrorFormulario('Por favor complete todos los campos.');
             return;
         }
+        setErrorFormulario(null);
 
         try {
             const nuevaPropuesta = {
                 id_cand: filtroCandidato,
                 titulo_pro: nuevoTitulo,
                 des_pro: nuevaDescripcion,
-                publico_pro: nuevoPublico,
+                publico_pro: nuevoPublico.join(', '), // Convertir la selección en una cadena
                 favorita: 0,
             };
 
@@ -122,7 +126,7 @@ const Propuestas: React.FC = () => {
             setPropuestas([...propuestas, response.data]);
             setNuevoTitulo('');
             setNuevaDescripcion('');
-            setNuevoPublico('');
+            setNuevoPublico([]);
             setFiltroCandidato(null);
             setMostrarFormulario(false);
         } catch (err) {
@@ -146,10 +150,19 @@ const Propuestas: React.FC = () => {
         setPaginaActual(nuevaPagina);
     };
 
+    const manejarCambioPublico = (opcion: string) => {
+        if (nuevoPublico.includes(opcion)) {
+            setNuevoPublico(nuevoPublico.filter((item) => item !== opcion));
+        } else {
+            setNuevoPublico([...nuevoPublico, opcion]);
+        }
+    };
+
     return (
         <div className="container">
             <h1>Propuestas</h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
+            {errorFormulario && <p style={{ color: 'red' }}>{errorFormulario}</p>}
 
             <div className="filtros">
                 <label>
@@ -199,6 +212,7 @@ const Propuestas: React.FC = () => {
                                 type="text"
                                 value={nuevoTitulo}
                                 onChange={(e) => setNuevoTitulo(e.target.value)}
+                                name="titulo"
                                 placeholder="Título"
                             />
                         </label>
@@ -208,18 +222,26 @@ const Propuestas: React.FC = () => {
                             <textarea
                                 value={nuevaDescripcion}
                                 onChange={(e) => setNuevaDescripcion(e.target.value)}
+                                name="descripcion"
                                 placeholder="Descripción"
                             />
                         </label>
 
                         <label>
                             Público al que va dirigida:
-                            <input
-                                type="text"
-                                value={nuevoPublico}
-                                onChange={(e) => setNuevoPublico(e.target.value)}
-                                placeholder="Público"
-                            />
+                            {opcionesPublico.map((opcion) => (
+                                <div key={opcion}>
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            value={opcion}
+                                            checked={nuevoPublico.includes(opcion)}
+                                            onChange={() => manejarCambioPublico(opcion)}
+                                        />
+                                        {opcion}
+                                    </label>
+                                </div>
+                            ))}
                         </label>
 
                         <button onClick={agregarPropuesta}>Agregar Propuesta</button>
