@@ -4,7 +4,7 @@ import { CandidatosPage } from './pages/PageCandidatos'
 import { Login } from './pages/auth/PageLogin'
 import { useEffect, useState } from 'react'
 import { SugerenciaForm } from './pages/SugerenciasPage'
-import CompShowPropuestas from './pages/propuestas/Propuestas'
+import CompShowPropuestas from './admin/AgregarPropuestas'
 import { Home } from './pages/HomePage'
 
 import { NewsPage } from './pages/NewsPage'
@@ -22,7 +22,7 @@ function App() {
         navigateTo('/admin/')
         setIsLogged(true)
     }
-    
+
     useEffect(() => {
         const loggued = localStorage.getItem('loggued')
         setIsLogged(!!loggued)

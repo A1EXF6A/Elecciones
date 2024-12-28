@@ -15,7 +15,7 @@ interface Funcionalidad {
 }
 
 const AdminPanel: React.FC = () => {
-    const [selectedOption, setSelectedOption] = useState<string>("Configuración de la página" );
+    const [selectedOption, setSelectedOption] = useState<string>("Configuración de la página");
 
     const funcionalidades: Funcionalidad[] = [
         { id: 1, nombre: "Agregar candidatos", descripcion: "Permite agregar candidatos a una lista y asignarles un cargo específico." },
@@ -24,7 +24,8 @@ const AdminPanel: React.FC = () => {
         { id: 4, nombre: "Ver resultados de los votos", descripcion: "Permite ver los resultados de votos por lista." },
         { id: 5, nombre: "Agregar evento", descripcion: "Permite añadir un nuevo evento al sistema." },
         { id: 6, nombre: "Agregar noticia", descripcion: "Permite añadir un nuevo evento al sistema." },
-        { id: 7, nombre: "Configuración de la página", descripcion: "Permite añadir un nuevo evento al sistema." },
+        { id: 7, nombre: "Administrar sugerencias", descripcion: "Permite administrar las sugerencias." },
+        { id: 8, nombre: "Configuración de la página", descripcion: "Permite añadir un nuevo evento al sistema." },
     ];
 
     const handleMenuClick = (nombre: string) => {
@@ -89,6 +90,11 @@ const AdminPanel: React.FC = () => {
                         {selectedOption === "Agregar evento" && (
                             <div>
                                 <AgregarEvento />
+                            </div>
+                        )}
+                        {selectedOption === "Administrar sugerencias" && (
+                            <div>
+                                <CompShowPropuestas />
                             </div>
                         )}
                         {selectedOption === "Configuración de la página" && (

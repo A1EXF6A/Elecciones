@@ -31,7 +31,7 @@ const PORT = process.env.PORT;
 try {
     await db.authenticate();
     console.log('Conexión establecida con la base de datos');
-    
+
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);
     });

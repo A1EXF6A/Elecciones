@@ -1,151 +1,138 @@
-:root {
-    --primary-color: #3498db;
-    --secondary-color: #2ecc71;
-    --background-color: #f4f6f7;
-    --text-color: #2c3e50;
-    --border-radius: 8px;
-    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+/* General container */
 .container {
-    max-width: 800px;
-    margin: 20px auto;
-    background-color: white;
-    padding: 30px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    color: var(--text-color);
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
-h3 {
+/* Title and Error message */
+h1 {
     text-align: center;
-    color: var(--primary-color);
-    font-weight: 600;
+    color: #333;
 }
 
-.select-container {
+p {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Filter Section */
+.filtros {
     display: flex;
-    gap: 15px;
+    justify-content: space-between;
     margin-bottom: 20px;
 }
 
-.select-container select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
-    transition: all 0.3s ease;
-    appearance: none;
-    background-image: linear-gradient(45deg, transparent 50%, var(--primary-color) 50%),
-        linear-gradient(135deg, var(--primary-color) 50%, transparent 50%);
-    background-position: calc(100% - 20px) calc(1em + 2px),
-        calc(100% - 15px) calc(1em + 2px);
-    background-size: 5px 5px,
-        5px 5px;
-    background-repeat: no-repeat;
+.filtros label {
+    font-size: 14px;
 }
 
-.select-container select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+.filtros select {
+    padding: 8px;
+    margin-left: 10px;
 }
 
-/* Form styling */
-form {
-    margin-top: 20px;
-    width: 100%;
-}
-
-form h4 {
-    margin-bottom: 15px;
-    color: var(--secondary-color);
-}
-
-form div {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-}
-
-/* Input and textarea styling */
-form input,
-form textarea {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
-    transition: all 0.3s ease;
-}
-
-form input:focus,
-form textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-}
-
-/* Submit button styling */
-form button {
-    padding: 12px;
-    width: 100%;
-    background-color: var(--primary-color);
+/* Button for adding a new proposal */
+.btn-agregar {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: var(--border-radius);
+    border-radius: 5px;
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 
-form button:hover {
-    background-color: #2980b9;
-    transform: translateY(-2px);
+.btn-agregar:hover {
+    background-color: #45a049;
 }
 
-form button:active {
-    transform: translateY(1px);
+/* Form for adding new proposal */
+.formulario-contenedor {
+    display: flex;
+    justify-content: center;
 }
 
-/* Disabled fields */
-form input:disabled,
-form select:disabled,
-form textarea:disabled {
-    background-color: var(--background-color);
-    cursor: not-allowed;
-    opacity: 0.7;
+.mini-formulario {
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
 }
 
-/* Responsive design */
-@media (max-width: 600px) {
-    .container {
-        margin: 10px;
-        padding: 20px;
-    }
-
-    .select-container {
-        flex-direction: column;
-        gap: 10px;
-    }
+.mini-formulario h3 {
+    text-align: center;
+    color: #333;
 }
 
-.mensaje {
+.mini-formulario label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.mini-formulario input,
+.mini-formulario textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.mini-formulario button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
     margin-top: 10px;
+}
+
+.mini-formulario button:hover {
+    background-color: #45a049;
+}
+
+/* List of Proposals */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
     padding: 10px;
     border-radius: 5px;
-    font-weight: bold;
-    text-align: center;
+    background-color: #f9f9f9;
 }
 
-.exito {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+ul li h3 {
+    margin: 0;
+    color: #333;
 }
 
-.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+ul li p {
+    font-size: 14px;
+    color: #555;
+}
+
+ul li button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+ul li button:hover {
+    background-color: #0056b3;
 }
