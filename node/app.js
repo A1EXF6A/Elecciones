@@ -8,6 +8,7 @@ import routerPro from './routes/propuestaRoutes.js';
 import adminRouter from './routes/adminRouter.js';
 import eventos from './routes/eventoRouters.js';
 import sugerencias from './routes/sugerenciasRoutes.js';
+import noticias from './routes/noticiasRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,7 @@ app.use('/api/propuestas', routerPro);
 app.use('/api/administradores', adminRouter);
 app.use('/api/eventos', eventos);
 app.use('/api/sugerencias', sugerencias);
+app.use('/api/noticias', noticias);
 
 
 app.get('/test', (req, res) => {
