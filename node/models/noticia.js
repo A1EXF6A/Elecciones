@@ -18,7 +18,7 @@ const Noticia = db.define('noticia', {
     favorita: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 0, // 0 no favorita, 1 favorita
+        defaultValue: 0,
     },
 }, {
     tableName: 'noticias',

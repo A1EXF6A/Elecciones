@@ -18,15 +18,15 @@ const Sugerencia = db.define('sugerencia', {
     visible: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 1, // 1 para visible, 0 para no visible
+        defaultValue: 1,
     },
     fec_sug: {
-        type: DataTypes.DATE, // Cambiado a DataTypes.DATE
-        defaultValue: DataTypes.NOW, // Fecha actual por defecto
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
     },
 }, {
-    tableName: 'sugerencias', // Nombre de la tabla en la base de datos
-    timestamps: false, // No incluir columnas de tiempo (createdAt, updatedAt)
+    tableName: 'sugerencias',
+    timestamps: false,
 });
 
 export default Sugerencia;

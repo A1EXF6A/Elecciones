@@ -1,6 +1,6 @@
 import Noticia from '../models/noticia.js';
 
-// Obtener todas las noticias
+
 export const obtenerNoticias = async (req, res) => {
     try {
         const noticias = await Noticia.findAll();
@@ -11,7 +11,7 @@ export const obtenerNoticias = async (req, res) => {
     }
 };
 
-// Crear una nueva noticia
+
 export const crearNoticia = async (req, res) => {
     try {
         const { titulo_not, des_not, favorita } = req.body;
@@ -23,7 +23,7 @@ export const crearNoticia = async (req, res) => {
     }
 };
 
-// Cambiar el estado de favorita de una noticia
+
 export const cambiarFavorita = async (req, res) => {
     try {
         const { id_not } = req.params;

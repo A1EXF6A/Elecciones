@@ -3,13 +3,13 @@ import { agregarSugerencia, obtenerSugerencias, actualizarVisibilidad } from '..
 
 const routerSug = express.Router();
 
-// Ruta para agregar una nueva sugerencia
+
 routerSug.post('/', agregarSugerencia);
 
-// Ruta para obtener todas las sugerencias
+
 routerSug.get('/', obtenerSugerencias);
 
-// Ruta para actualizar la visibilidad de una sugerencia
-routerSug.patch('/:id', actualizarVisibilidad);
+
+routerSug.patch('/:id_sug', actualizarVisibilidad);
 
 export default routerSug;

@@ -11,10 +11,10 @@ const Propuesta = db.define('propuesta', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'candidatos', // Nombre de la tabla referenciada
+            model: 'candidatos',
             key: 'id_cand',
         },
-        onDelete: 'CASCADE', // Acción al eliminar el candidato
+        onDelete: 'CASCADE',
     },
     titulo_pro: {
         type: DataTypes.STRING(100),
@@ -34,8 +34,8 @@ const Propuesta = db.define('propuesta', {
         defaultValue: 0,
     },
 }, {
-    tableName: 'propuesta', // Nombre de la tabla en la base de datos
-    timestamps: false, // No incluir columnas de tiempo (createdAt, updatedAt)
+    tableName: 'propuesta',
+    timestamps: false,
 });
 
 export default Propuesta;
