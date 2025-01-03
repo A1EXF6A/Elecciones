@@ -9,18 +9,23 @@ const Propuesta = db.define('propuesta', {
     },
     id_cand: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+            model: 'candidatos',
+            key: 'id_cand',
+        },
+        onDelete: 'CASCADE',
     },
     titulo_pro: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(100),
         allowNull: false,
     },
     des_pro: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     publico_pro: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     favorita: {
@@ -29,7 +34,7 @@ const Propuesta = db.define('propuesta', {
         defaultValue: 0,
     },
 }, {
-    tableName: 'propuestas', 
+    tableName: 'propuestas',
     timestamps: false,
 });
 

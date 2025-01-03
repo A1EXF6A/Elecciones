@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import AgregarPropuestas from "./AgregarPropuestas";
 import AgregarCandidato from "./AgregarCandidato";
 import AgregarEvento from "./AgregarEvento";
-import CompShowPropuestas from "../pages/propuestas/Propuestas";
 import ConfigPage from "../pages/ConfigPage";
 import ResultadosPage from "../pages/ResultadosPage";
+import Sugerencias from "./sugerencias";
+import Noticias from "./noticias";
 
 interface Funcionalidad {
     id: number;
@@ -15,16 +16,17 @@ interface Funcionalidad {
 }
 
 const AdminPanel: React.FC = () => {
-    const [selectedOption, setSelectedOption] = useState<string>("Configuración de la página" );
+    const [selectedOption, setSelectedOption] = useState<string>("Configuración de la página");
 
     const funcionalidades: Funcionalidad[] = [
         { id: 1, nombre: "Agregar candidatos", descripcion: "Permite agregar candidatos a una lista y asignarles un cargo específico." },
-        { id: 2, nombre: "Agregar propuestas", descripcion: "Permite asignar propuestas a los candidatos." },
-        { id: 3, nombre: "Ver propuestas", descripcion: "Permite desactivar propuestas cambiando su estado a 'Inactiva'." },
-        { id: 4, nombre: "Ver resultados de los votos", descripcion: "Permite ver los resultados de votos por lista." },
-        { id: 5, nombre: "Agregar evento", descripcion: "Permite añadir un nuevo evento al sistema." },
-        { id: 6, nombre: "Agregar noticia", descripcion: "Permite añadir un nuevo evento al sistema." },
-        { id: 7, nombre: "Configuración de la página", descripcion: "Permite añadir un nuevo evento al sistema." },
+        { id: 2, nombre: "Administrar propuestas", descripcion: "Permite asignar propuestas a los candidatos y agregarlas como favoritas" },
+        { id: 3, nombre: "Ver resultados de los votos", descripcion: "Permite ver los resultados de votos por lista." },
+        { id: 4, nombre: "Agregar evento", descripcion: "Permite añadir un nuevo evento al sistema." },
+        { id: 5, nombre: "Agregar noticia", descripcion: "Permite añadir un nuevo evento al sistema." },
+        { id: 6, nombre: "Administrar noticias", descripcion: "Permite filtar y cambiar a favoritas las noticias." },
+        { id: 7, nombre: "Administrar sugerencias", descripcion: "Permite administrar las sugerencias." },
+        { id: 8, nombre: "Configuración de la página", descripcion: "Permite añadir un nuevo evento al sistema." },
     ];
 
     const handleMenuClick = (nombre: string) => {
@@ -73,22 +75,32 @@ const AdminPanel: React.FC = () => {
                                 <AgregarCandidato />
                             </div>
                         )}
-                        {selectedOption === "Agregar propuestas" && (
+                        {selectedOption === "Administrar propuestas" && (
                             <div>
                                 <AgregarPropuestas />
                             </div>
                         )}
-                        {selectedOption === "Ver propuestas" && (
+                        {selectedOption === "Ver resultados de los votos" && (
                             <div>
-                                <CompShowPropuestas />
+                                <ResultadosPage />
                             </div>
                         )}
-                        {selectedOption === "Ver resultados de los votos" && (
-                            <ResultadosPage />
-                        )}
                         {selectedOption === "Agregar evento" && (
+                            <AgregarEvento />
+                        )}
+                        {selectedOption === "Agregar noticia" && (
                             <div>
                                 <AgregarEvento />
+                            </div>
+                        )}
+                        {selectedOption === "Administrar noticias" && (
+                            <div>
+                                <Noticias />
+                            </div>
+                        )}
+                        {selectedOption === "Administrar sugerencias" && (
+                            <div>
+                                <Sugerencias />
                             </div>
                         )}
                         {selectedOption === "Configuración de la página" && (

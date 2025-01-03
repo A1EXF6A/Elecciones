@@ -1,172 +1,285 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './AgregarPropuestas.css'; // Importa el archivo CSS
+import './AgregarPropuestas.css';
+
+interface Propuesta {
+    id_pro: number;
+    id_cand: number;
+    titulo_pro: string;
+    des_pro: string;
+    publico_pro: string;
+    favorita: number;
+}
+
+interface Candidato {
+    id_cand: number;
+    nom_can: string;
+    cargo_can: string;
+}
 
 interface TipoEleccion {
     id_eleccion: number;
     nombre_eleccion: string;
 }
 
-interface Candidato {
-    id_cand: number;
-    nom1: string;
-    nom2: string;
-    ape1: string;
-    ape2: string;
-    cargo: string;
-}
-
-const AgregarPropuestas: React.FC = () => {
-    const [tipoElecciones, setTipoElecciones] = useState<TipoEleccion[]>([]);
+const Propuestas: React.FC = () => {
+    const [propuestas, setPropuestas] = useState<Propuesta[]>([]);
     const [candidatos, setCandidatos] = useState<Candidato[]>([]);
-    const [selectedTipo, setSelectedTipo] = useState<number | null>(null);
-    const [selectedCandidato, setSelectedCandidato] = useState<number | null>(null);
-    const [nombrePropuesta, setNombrePropuesta] = useState<string>('');
-    const [descripcionPropuesta, setDescripcionPropuesta] = useState<string>('');
-    const [publico, setPublico] = useState<string>('');
-    const [mensaje, setMensaje] = useState<string>('');
+    const [tiposEleccion, setTiposEleccion] = useState<TipoEleccion[]>([]);
+    const [filtroCandidato, setFiltroCandidato] = useState<number | null>(null);
+    const [filtroEleccion, setFiltroEleccion] = useState<number | null>(null);
+    const [nuevoTitulo, setNuevoTitulo] = useState<string>('');
+    const [nuevaDescripcion, setNuevaDescripcion] = useState<string>('');
+    const [nuevoPublico, setNuevoPublico] = useState<string[]>([]);
+    const [mostrarFormulario, setMostrarFormulario] = useState<boolean>(false);
+    const [errorFormulario, setErrorFormulario] = useState<string | null>(null);
 
-    // Cargar tipos de elección
+    const [paginaActual, setPaginaActual] = useState<number>(1);
+    const propuestasPorPagina = 5;
+
+    const opcionesPublico = ['Estudiantes', 'Trabajadores', 'Empresarios', 'Desempleados', 'Jubilados', 'Universidades', 'Escuelas', 'Hospitales'];
+
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchTiposEleccion = async () => {
             try {
-                const tipoResponse = await axios.get('http://localhost:8000/api/tipoEleccion');
-                setTipoElecciones(tipoResponse.data);
-            } catch (error) {
-                console.error('Error fetching tipo_eleccion:', error);
+                const response = await axios.get('http://localhost:8000/api/tipoEleccion');
+                setTiposEleccion(response.data || []);
+            } catch (err) {
+                console.error(err);
             }
         };
-        fetchData();
+
+        fetchTiposEleccion();
     }, []);
 
-    // Cargar candidatos cuando se selecciona un tipo de elección
     useEffect(() => {
-        if (selectedTipo !== null) {
-            const fetchCandidatos = async () => {
-                try {
-                    const candidatoResponse = await axios.get(`http://localhost:8000/api/candidatos/${selectedTipo}`);
-                    setCandidatos(candidatoResponse.data);
-                } catch (error) {
-                    console.error('Error fetching candidatos:', error);
-                }
-            };
-            fetchCandidatos();
-        }
-    }, [selectedTipo]);
+        const fetchPropuestas = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/api/propuestas/ver');
+                setPropuestas(response.data || []);
+            } catch (err) {
+                console.error(err);
+            }
+        };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+        fetchPropuestas();
+    }, []);
+
+    useEffect(() => {
+        const fetchCandidatos = async () => {
+            if (filtroEleccion === null) {
+                setCandidatos([]);
+                return;
+            }
+
+            try {
+                const response = await axios.get(`http://localhost:8000/api/candidatos/${filtroEleccion}`);
+                setCandidatos(response.data.data || []);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchCandidatos();
+    }, [filtroEleccion]);
+
+    const cambiarFavorito = async (id_pro: number, favorita: number) => {
         try {
-            await axios.post('http://localhost:8000/api/propuestas', {
-                id_cand: selectedCandidato,
-                nom_pro: nombrePropuesta,
-                des_pro: descripcionPropuesta,
-                publico,
+            const response = await axios.patch(`http://localhost:8000/api/propuestas/${id_pro}`, {
+                favorita: favorita === 1 ? 0 : 1,
             });
 
-            // Mensaje de éxito
-            setMensaje('Propuesta agregada correctamente!');
-            // Limpiar el formulario
-            setNombrePropuesta('');
-            setDescripcionPropuesta('');
-            setPublico('');
-            setSelectedCandidato(null);
+            setPropuestas((prevPropuestas) =>
+                prevPropuestas.map((propuesta) =>
+                    propuesta.id_pro === id_pro
+                        ? { ...propuesta, favorita: response.data.favorita }
+                        : propuesta
+                )
+            );
+        } catch (err) {
+            console.error('Error al cambiar el estado de favorito:', err);
+        }
+    };
 
-        } catch (error) {
-            console.error('Error al agregar propuesta:', error);
-            // Mensaje de error
-            setMensaje('Hubo un error al agregar la propuesta.');
+    const agregarPropuesta = async () => {
+        if (!filtroEleccion || !filtroCandidato || !nuevoTitulo || !nuevaDescripcion || nuevoPublico.length === 0) {
+            setErrorFormulario('Por favor complete todos los campos.');
+            return;
+        }
+        setErrorFormulario(null);
+
+        try {
+            const nuevaPropuesta = {
+                id_cand: filtroCandidato,
+                titulo_pro: nuevoTitulo,
+                des_pro: nuevaDescripcion,
+                publico_pro: nuevoPublico.join(', '), // Convertir la selección en una cadena
+                favorita: 0,
+            };
+
+            const response = await axios.post('http://localhost:8000/api/propuestas', nuevaPropuesta);
+            setPropuestas([...propuestas, response.data]);
+            setNuevoTitulo('');
+            setNuevaDescripcion('');
+            setNuevoPublico([]);
+            setFiltroCandidato(null);
+            setMostrarFormulario(false);
+        } catch (err) {
+            console.error('Error al agregar la propuesta:', err);
+        }
+    };
+
+    const propuestasFiltradas = propuestas.filter((propuesta) => {
+        if (filtroCandidato !== null && propuesta.id_cand !== filtroCandidato) return false;
+        return true;
+    });
+
+    const indexUltimaPropuesta = paginaActual * propuestasPorPagina;
+    const indexPrimeraPropuesta = indexUltimaPropuesta - propuestasPorPagina;
+    const propuestasPaginadas = propuestasFiltradas.slice(indexPrimeraPropuesta, indexUltimaPropuesta);
+
+    const totalPaginas = Math.ceil(propuestasFiltradas.length / propuestasPorPagina);
+
+    const cambiarPagina = (nuevaPagina: number) => {
+        setPaginaActual(nuevaPagina);
+    };
+
+    const manejarCambioPublico = (opcion: string) => {
+        if (nuevoPublico.includes(opcion)) {
+            setNuevoPublico(nuevoPublico.filter((item) => item !== opcion));
+        } else {
+            setNuevoPublico([...nuevoPublico, opcion]);
         }
     };
 
     return (
         <div className="container">
-            <h3>Agregar Propuesta</h3>
+            <h1>Propuestas</h1>
+            {errorFormulario && <p style={{ color: 'red' }}>{errorFormulario}</p>}
 
-            {/* Selección de Elección */}
-            <div className="select-container">
-                <div>
-                    <label>Elección:</label>
-                    <select onChange={(e) => setSelectedTipo(Number(e.target.value))} value={selectedTipo ?? ''}>
-                        <option value="">Seleccione una elección</option>
-                        {tipoElecciones.map((eleccion) => (
-                            <option key={eleccion.id_eleccion} value={eleccion.id_eleccion}>
-                                {eleccion.nombre_eleccion}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            </div>
-
-            {/* Selección de Candidato */}
-            <div className="select-container">
-                <div>
-                    <label>Candidato:</label>
+            <div className="filtros">
+                <label>
+                    Filtrar por tipo de elección:
                     <select
-                        onChange={(e) => setSelectedCandidato(Number(e.target.value))}
-                        value={selectedCandidato ?? ''}
-                        disabled={!selectedTipo}
+                        value={filtroEleccion ?? ''}
+                        onChange={(e) => setFiltroEleccion(Number(e.target.value) || null)}
                     >
-                        <option value="">Seleccione un candidato</option>
-                        {candidatos.map((candidato) => (
-                            <option key={candidato.id_cand} value={candidato.id_cand}>
-                                {candidato.nom1} {candidato.ape1} ({candidato.cargo})
+                        <option value="">-- Seleccionar tipo de elección --</option>
+                        {tiposEleccion.map((tipo) => (
+                            <option key={tipo.id_eleccion} value={tipo.id_eleccion}>
+                                {tipo.nombre_eleccion}
                             </option>
                         ))}
                     </select>
-                </div>
-            </div>
+                </label>
 
-            {/* Formulario de Propuesta */}
-            <div>
-                <h4>Formulario: Agregar Propuesta</h4>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <label>Nombre de la propuesta:</label>
-                        <input
-                            type="text"
-                            value={nombrePropuesta}
-                            onChange={(e) => setNombrePropuesta(e.target.value)}
-                            required
-                            disabled={!selectedCandidato}
-                        />
-                    </div>
-
-                    <div>
-                        <label>Descripción:</label>
-                        <textarea
-                            value={descripcionPropuesta}
-                            onChange={(e) => setDescripcionPropuesta(e.target.value)}
-                            required
-                            disabled={!selectedCandidato}
-                        ></textarea>
-                    </div>
-
-                    <div>
-                        <label>Dirigido a:</label>
-                        <input
-                            type="text"
-                            value={publico}
-                            onChange={(e) => setPublico(e.target.value)}
-                            required
-                            disabled={!selectedCandidato}
-                        />
-                    </div>
-
-                    <button type="submit" disabled={!selectedCandidato}>
-                        Agregar Propuesta
-                    </button>
-                </form>
-
-                {/* Mostrar mensaje de éxito o error */}
-                {mensaje && (
-                    <div className={`mensaje ${mensaje.includes('correctamente') ? 'exito' : 'error'}`}>
-                        {mensaje}
-                    </div>
+                {filtroEleccion && (
+                    <label>
+                        Filtrar por candidato:
+                        <select
+                            value={filtroCandidato ?? ''}
+                            onChange={(e) => setFiltroCandidato(Number(e.target.value) || null)}
+                        >
+                            <option value="">-- Seleccionar candidato --</option>
+                            {candidatos.map((candidato) => (
+                                <option key={candidato.id_cand} value={candidato.id_cand}>
+                                    {candidato.nom_can} - {candidato.cargo_can}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
                 )}
             </div>
+
+            <button className="btn-agregar" onClick={() => setMostrarFormulario(!mostrarFormulario)}>
+                {mostrarFormulario ? 'Cancelar' : 'Agregar Propuesta'}
+            </button>
+
+            {mostrarFormulario && (
+                <div className="formulario-contenedor">
+                    <div className="mini-formulario">
+                        <h3>Agregar Nueva Propuesta</h3>
+                        <label>
+                            Título de la propuesta:
+                            <input
+                                type="text"
+                                value={nuevoTitulo}
+                                onChange={(e) => setNuevoTitulo(e.target.value)}
+                                name="titulo"
+                                placeholder="Título"
+                            />
+                        </label>
+
+                        <label>
+                            Descripción de la propuesta:
+                            <textarea
+                                value={nuevaDescripcion}
+                                onChange={(e) => setNuevaDescripcion(e.target.value)}
+                                name="descripcion"
+                                placeholder="Descripción"
+                            />
+                        </label>
+
+                        <label>
+                            Público al que va dirigida:
+                            {opcionesPublico.map((opcion) => (
+                                <div key={opcion}>
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            value={opcion}
+                                            checked={nuevoPublico.includes(opcion)}
+                                            onChange={() => manejarCambioPublico(opcion)}
+                                        />
+                                        {opcion}
+                                    </label>
+                                </div>
+                            ))}
+                        </label>
+
+                        <button onClick={agregarPropuesta}>Agregar Propuesta</button>
+                    </div>
+                </div>
+            )}
+
+            {propuestasPaginadas.length > 0 ? (
+                <>
+                    <ul>
+                        {propuestasPaginadas.map((propuesta) => (
+                            <li key={propuesta.id_pro}>
+                                <h3>{propuesta.titulo_pro}</h3>
+                                <p>{propuesta.des_pro}</p>
+                                <p>
+                                    <strong>Público:</strong> {propuesta.publico_pro}
+                                </p>
+                                <p>
+                                    <strong>Favorita:</strong> {propuesta.favorita ? 'Sí' : 'No'}
+                                </p>
+                                <button
+                                    onClick={() => cambiarFavorito(propuesta.id_pro, propuesta.favorita)}
+                                >
+                                    {propuesta.favorita ? 'Quitar de favoritos' : 'Marcar como favorita'}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="paginacion">
+                        {Array.from({ length: totalPaginas }, (_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => cambiarPagina(i + 1)}
+                                className={paginaActual === i + 1 ? 'activo' : ''}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
+                    </div>
+                </>
+            ) : (
+                <p>No hay propuestas disponibles.</p>
+            )}
         </div>
     );
 };
 
-export default AgregarPropuestas;
+export default Propuestas;
