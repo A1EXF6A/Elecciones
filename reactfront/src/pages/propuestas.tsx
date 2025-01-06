@@ -21,7 +21,6 @@ const PropuestasList: React.FC = () => {
     const [propuestas, setPropuestas] = useState<Propuesta[]>([]);
     const [selectedCandidato, setSelectedCandidato] = useState<number | null>(null);
     const [selectedPublico, setSelectedPublico] = useState<string>('Todos');
-    const [error, setError] = useState<string | null>(null);
     const [publicos, setPublicos] = useState<string[]>([]);
     const [expandedPropuesta, setExpandedPropuesta] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual
@@ -36,7 +35,6 @@ const PropuestasList: React.FC = () => {
                 setCandidatos(response.data.data);
             } catch (err) {
                 console.error('Error al obtener los candidatos:', err);
-                setError('Error al obtener los candidatos.');
             }
         };
 
@@ -46,7 +44,6 @@ const PropuestasList: React.FC = () => {
                 setPropuestas(response.data);
             } catch (err) {
                 console.error('Error al obtener las propuestas:', err);
-                setError('Error al obtener las propuestas.');
             }
         };
 
@@ -102,7 +99,7 @@ const PropuestasList: React.FC = () => {
     };
 
     const renderCandidatos = () => (
-        <div style={{ marginBottom: '20px', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+        <div style={{ marginBottom: '20px', display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center' }}>
             {candidatos.map((candidato) => (
                 <div
                     key={candidato.id_cand}
@@ -122,7 +119,8 @@ const PropuestasList: React.FC = () => {
                         alt={candidato.nom_can}
                         style={{
                             width: '100%',
-                            height: 'auto',
+                            minHeight: '150px',
+                            maxHeight: '150px',
                             borderRadius: '5px',
                             marginBottom: '10px',
                         }}
@@ -194,15 +192,18 @@ const PropuestasList: React.FC = () => {
                 ))}
             </ul>
 
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', alignItems: 'center' }}>
                 <button
                     onClick={() => cambiarPagina(currentPage - 1)}
                     disabled={currentPage === 1}
                     style={{
-                        padding: '10px',
-                        margin: '0 5px',
+                        marginTop: '20px',
+                        padding: '10px 20px',
+                        fontSize: '16px',
                         borderRadius: '5px',
-                        backgroundColor: '#f0f0f0',
+                        border: '1px solid #007bff', // Borde azul
+                        backgroundColor: '#007bff',  // Fondo azul
+                        color: '#fff',
                         cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
                     }}
                 >
@@ -251,7 +252,6 @@ const PropuestasList: React.FC = () => {
     return (
         <div className="container">
             <h1>Lista de Propuestas</h1>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
             {selectedCandidato === null ? renderCandidatos() : renderPropuestas()}
         </div>
     );
