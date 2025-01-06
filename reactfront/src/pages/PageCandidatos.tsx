@@ -1,93 +1,120 @@
-import { useCallback, useEffect, useRef, useState } from "react"
-import Card from "../components/candidatoCard/CandidatoCard"
+import { createContext, useEffect, useState } from "react"
+import { Config } from "../util/models/Config"
+import { Partido } from "../util/models/PartidoModel"
+import { getPartidos } from "../util/data"
 import { updateVote } from "../util/update"
+import Card from "../components/candidatoCard/CandidatoCard"
+
+import 'chartist/dist/index.css'
+import PieChartVote from "../components/PieChartVotos"
+
+type VotoContextType = {
+    openModal: (id: number) => void,
+    idPartido: number | null
+}
+
+type Voto = {
+    idPartido: number
+}
+
+const VotoContext = createContext<VotoContextType>({} as VotoContextType)
 
 const CandidatosPage = () => {
-    const [firstLocked, setFirstLocked] = useState(false)
-    const [secondLocked, setSecondLocked] = useState(false)
-    const [isLoged, setIsLoged] = useState(false)
-
-    const firstLockedRef = useRef(false);
-    const secondLockedRef = useRef(false);
-
-    const vote = localStorage.getItem('vote') || '0';
-    const userId = localStorage.getItem('userId');
+    const [someChoose, setSomeChoose] = useState(false)
+    const [dialogState, setDialogState] = useState<number>(0)
+    const [dialogOpen, setDialogOpen] = useState(false)
+    const [partidos, setPartidos] = useState<Partido[]>([])
+    const [idPartido, setIdPartido] = useState<number | null>(null)
+    const [tipoEleccion, setTipoEleccion] = useState<number | null>()
 
     useEffect(() => {
-        getVote()
+        fetchData()
 
-        return () => {
-            if (!userId) return;
+        const votoTipo = localStorage.getItem(`votoTipo${tipoEleccion}`)
+        if (!votoTipo) return;
 
-            const firstVoted = !firstLockedRef.current
-            const secondVoted = !secondLockedRef.current
-            const anyVoted = firstVoted && secondVoted
-            const voteState = {
-                change: false,
-                vote: '0'
-            }
+        const voto = (JSON.parse(votoTipo) as Voto).idPartido
 
-            if (anyVoted && vote !== '0') {
-                voteState.change = true;
-                voteState.vote = '0';
-            } else if (firstVoted && (vote === '2' || vote === '0')) {
-                voteState.change = true;
-                voteState.vote = '1';
-            } else if (secondVoted && (vote === '1' || vote === '0')) {
-                voteState.change = true;
-                voteState.vote = '2'
-            }            
+        setIdPartido(voto)
+        setSomeChoose(true)
+    }, [tipoEleccion])
 
-            if (voteState.change) {
-                localStorage.setItem('vote', voteState.vote)
-                updateVote(Number(userId), voteState.vote)
-            }
-        }
-    }, [])
+    const fetchData = async () => {
+        const stringConfig = localStorage.getItem('config')
 
-    useEffect(() => {
-        firstLockedRef.current = firstLocked;
-        secondLockedRef.current = secondLocked;
-    }, [firstLocked, secondLocked]);
+        if (!stringConfig) return
 
-    const getVote = useCallback(() => {
-        if (!userId) {
-            setIsLoged(false);
-            return;
-        }
+        const tipo = JSON.parse(stringConfig) as Config
+        setTipoEleccion(tipo.tipo_eleccion)
+        const data = await getPartidos(tipo.tipo_eleccion)
 
-        setIsLoged(true);
-
-        if (vote === '0') return;
-
-        handleLock(vote === '1');
-    }, []);
-
-    const handleLock = (isFirst: boolean) => {
-        if (isFirst) {
-            setSecondLocked(!secondLocked);
-        } else {
-            setFirstLocked(!firstLocked);
+        if (data.partidos) {
+            setPartidos(data.partidos)
         }
     }
 
+    const openModal = (id: number) => {
+        setDialogOpen(true)
+        setIdPartido(id)
+    }
+
+    const backToVote = () => {
+        setIdPartido(null)
+        setDialogOpen(false)
+    }
+
+    const handleVote = () => {
+        setSomeChoose(true)
+        setDialogState(1)
+
+        localStorage.setItem(`votoTipo${tipoEleccion}`, JSON.stringify({ idPartido }))
+        updateVote(idPartido!)
+    }
+
     return (
-        <div className="cand">
-            <div className="cand-cont">
-                <Card
-                    handleLock={handleLock}
-                    isLocked={firstLocked}
-                    isLoged={isLoged}
-                    isFirst
-                />
-                <Card
-                    handleLock={handleLock}
-                    isLocked={secondLocked}
-                    isLoged={isLoged}
-                />
+        <VotoContext.Provider value={{ openModal, idPartido }}>
+            <div className="cand">
+                <div className="cand-cont">
+                    {
+                        partidos.length > 0 ?
+                            partidos.map((partido) => (
+                                <Card
+                                    key={partido.id}
+                                    idPartido={partido.id}
+                                    partido={partido}
+                                    isLocked={someChoose}
+                                />
+                            )) :
+                            <section className="no-cand">
+                                <h1><i>No existen partidos inscritos...</i></h1>
+                            </section>
+                    }
+                </div>
+                <dialog open={dialogOpen} className='cand-dialog'>
+                    {dialogState === 0 ?
+                        <div className="content-dialog">
+                            <h1>¿Estás seguro?</h1>
+                            <p>No se puede deshacer el voto</p>
+                            <div className="buttons">
+                                <button onClick={() => handleVote()}>Sí, estoy seguro</button>
+                                <button onClick={() => backToVote()}>No, Volver a votar</button>
+                            </div>
+                        </div> : dialogState === 1 ?
+                            <div className="content-dialog">
+                                <h1>¡Gracias por votar!</h1>
+                                <p>Recuerda que tu voto es secreto</p>
+                                <button onClick={() => setDialogState(2)}>Entendido</button>
+                            </div> :
+                            <div className="content-dialog">
+                                <h1>Estadistica de votos</h1>
+                                <PieChartVote tipo_eleccion={tipoEleccion!} />
+                                <button onClick={() => setDialogOpen(false)}>Entendido</button>
+                            </div>
+                    }
+                </dialog>
             </div>
-        </div>
+        </VotoContext.Provider>
     )
 }
 
-export { CandidatosPage }
+export { CandidatosPage, VotoContext }

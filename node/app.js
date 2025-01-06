@@ -2,23 +2,28 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import db from './database/db.js';
-import userRouter from './routes/router.js';
-import propuestaRouter from './routes/propuestaRouter.js';
+import tipoEleccionRoutes from './routes/tipoEleccionRoutes.js';
+import candidatoRoutes from './routes/candidatoRouter.js';
+import routerPro from './routes/propuestaRouter.js';
+import adminRouter from './routes/adminRouter.js';
+import eventos from './routes/eventoRouter.js';
+import routerNoticias from './routes/newsRouter.js';
+import sugerencias from './routes/sugerenciasRoutes.js';
 
 dotenv.config();
 const app = express();
 
-// Configuración de CORS más específica
-app.use(cors({
-    origin: 'http://localhost:5173', // Puerto donde corre tu app de React+Vite
-    credentials: true
-}));
+app.use(cors());
 
 app.use(express.json());
 
-// Rutas
-app.use('/users', userRouter);
-app.use('/propuestas', propuestaRouter);
+app.use('/api/tipoEleccion', tipoEleccionRoutes);
+app.use('/api/candidatos', candidatoRoutes);
+app.use('/api/propuestas', routerPro);
+app.use('/api/administradores', adminRouter);
+app.use('/api/eventos', eventos);
+app.use('/api/sugerencias', sugerencias);
+app.use('/api/noticias', routerNoticias);
 
 
 app.get('/test', (req, res) => {
@@ -30,10 +35,6 @@ const PORT = process.env.PORT;
 try {
     await db.authenticate();
     console.log('Conexión establecida con la base de datos');
-
-    // Sincronizar modelos con la base de datos
-    await db.sync();
-    console.log('Modelos sincronizados con la base de datos');
 
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);

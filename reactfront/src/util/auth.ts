@@ -1,14 +1,19 @@
 import axios from "axios";
 
-const URI = "http://localhost:8000/users/";
+const URI = "http://localhost:8000/api/administradores";
 
-interface APIResponse<T = any> {
+interface APIResponse<T = unknown> {
     success: boolean;
     data: T | null;
 }
 
 interface UserToLogin {
     credential: string
+    password: string
+}
+
+interface AdminToLogin {
+    userName: string
     password: string
 }
 
@@ -38,6 +43,39 @@ const loginUser = async ({ credential, password }: UserToLogin): Promise<APIResp
             message: string
             user: {id_use: number, vot_use: number}
         }>(`${URI}login`, userData)
+
+        if (!data.success) {
+            throw new Error(data.message);
+        }
+
+        return {
+            success: data.success,
+            data: data.user
+        }
+    } catch (error) {
+        console.error(error);
+        return {
+            success: false,
+            data: null
+        };
+    }
+}
+
+const loginAdmin = async ({ userName, password }: AdminToLogin): Promise<APIResponse<{ id: number }>> => {
+    const userData = {
+        userName: '',
+        password: ''
+    }
+
+    userData.password = password
+    userData.userName = userName
+
+    try {
+        const { data } = await axios.post<{
+            success: boolean,
+            message: string
+            user: { id: number }
+        }>(`${URI}/login`, userData)
 
         if (!data.success) {
             throw new Error(data.message);
@@ -93,4 +131,4 @@ const createNewUser = async ({ nom_use, cor_use, pas_use }: UserToRegister): Pro
 }
 
 
-export { loginUser, createNewUser }
+export { loginUser, loginAdmin, createNewUser }

@@ -1,15 +1,17 @@
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
 import CandidatoList from "../../components/propuestas/CandidatoList";
 import PropuestaList from "../../components/propuestas/PropuestaList";
 import PubProFilter from "../../components/propuestas/PubProFilter";
+import EditModal from "./EditModal";
 import './Propuestas.css';
 
-const URI = "http://localhost:8000/propuestas/";
+const URI = "http://localhost:8000/api/propuestas/";
 
 interface Propuesta {
+    id_pro: number;
     nom_cand: string;
-    inf_pro: string;
+    des_pro: string;
     pub_pro: string;
     nom_pro: string;
 }
@@ -21,9 +23,10 @@ const CompShowPropuestas = () => {
     const [selectedCandidato, setSelectedCandidato] = useState<string | null>(null);
     const [pubProOptions, setPubProOptions] = useState<string[]>([]);
     const [selectedPubPro, setSelectedPubPro] = useState<string>("");
-
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const itemsPerPage = 5;  // Mostrar 5 propuestas por página
+    const [editingPropuesta, setEditingPropuesta] = useState<Propuesta | null>(null); // Estado para editar
+
+    const itemsPerPage = 5;
 
     useEffect(() => {
         getPropuestas();
@@ -31,11 +34,11 @@ const CompShowPropuestas = () => {
 
     const getPropuestas = async () => {
         try {
-            const res = await axios.get(URI);
+            const res = await axios.get(URI + 'ver');
             setPropuestas(res.data);
-            setFilteredPropuestas(res.data);  // Mostrar todas las propuestas al inicio
+            setFilteredPropuestas(res.data);
         } catch (error) {
-            setError(error instanceof Error ? error.message : 'Error desconocido');
+            setError(error instanceof Error ? error.message : "Error desconocido");
         }
     };
 
@@ -53,7 +56,6 @@ const CompShowPropuestas = () => {
         setPubProOptions(uniquePubProOptions);
     };
 
-
     const handlePubProFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const pubPro = event.target.value;
         setSelectedPubPro(pubPro);
@@ -66,9 +68,43 @@ const CompShowPropuestas = () => {
         setCurrentPage(1);
     };
 
+    const handleEditPropuesta = (propuesta: Propuesta) => {
+        setEditingPropuesta(propuesta); // Establece la propuesta seleccionada para editar
+    };
+
+    const handleDeletePropuesta = async (propuestaId: number) => {
+        if (window.confirm("¿Estás seguro de que deseas eliminar esta propuesta?")) {
+            try {
+                await axios.delete(`${URI}${propuestaId}`);
+                setPropuestas(propuestas.filter(propuesta => propuesta.id_pro !== propuestaId));
+                setFilteredPropuestas(filteredPropuestas.filter(propuesta => propuesta.id_pro !== propuestaId));
+            } catch (error) {
+                console.error("Error al eliminar propuesta:", error);
+            }
+        }
+    };
+
+    const handleUpdatePropuesta = async (updatedPropuesta: Propuesta) => {
+        try {
+            await axios.put(`${URI}${updatedPropuesta.id_pro}`, updatedPropuesta);
+            setPropuestas(propuestas.map(propuesta =>
+                propuesta.id_pro === updatedPropuesta.id_pro ? updatedPropuesta : propuesta
+            ));
+            setFilteredPropuestas(filteredPropuestas.map(propuesta =>
+                propuesta.id_pro === updatedPropuesta.id_pro ? updatedPropuesta : propuesta
+            ));
+            setEditingPropuesta(null); // Cerrar el modal
+        } catch (error) {
+            console.error("Error al actualizar propuesta:", error);
+        }
+    };
+
+    const handleCloseEditModal = () => {
+        setEditingPropuesta(null);
+    };
 
     const uniqueCandidatos = Array.from(new Set(propuestas.map(propuesta => propuesta.nom_cand)));
-
+ 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentPropuestas = filteredPropuestas.slice(indexOfFirstItem, indexOfLastItem);
@@ -83,7 +119,6 @@ const CompShowPropuestas = () => {
             <h1>Propuestas</h1>
             {error && <div className="alert alert-danger">{error}</div>}
 
-            {/* Mostrar lista de candidatos solo si no hay candidato seleccionado */}
             {!selectedCandidato ? (
                 <CandidatoList
                     candidatos={uniqueCandidatos}
@@ -101,7 +136,7 @@ const CompShowPropuestas = () => {
                         className="btn btn-warning mb-3"
                         onClick={() => {
                             setSelectedCandidato(null);
-                            setFilteredPropuestas(propuestas); // Mostrar todas las propuestas de nuevo
+                            setFilteredPropuestas(propuestas);
                             setCurrentPage(1);
                         }}
                     >
@@ -110,13 +145,22 @@ const CompShowPropuestas = () => {
                 </>
             )}
 
-            {/* Listado de propuestas según selección */}
             <PropuestaList
                 propuestas={currentPropuestas}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={handlePageChange}
+                onEdit={handleEditPropuesta}
+                onDelete={handleDeletePropuesta}
             />
+
+            {editingPropuesta && (
+                <EditModal
+                    propuesta={editingPropuesta}
+                    onUpdate={handleUpdatePropuesta}
+                    onClose={handleCloseEditModal}
+                />
+            )}
         </div>
     );
 };

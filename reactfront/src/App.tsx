@@ -2,55 +2,57 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import { NavBar } from './components/navbar/NavBar'
 import { CandidatosPage } from './pages/PageCandidatos'
 import { Login } from './pages/auth/PageLogin'
-import { Register } from './pages/auth/PageRegister'
-import { UserPage } from './pages/PageUser'
 import { useEffect, useState } from 'react'
-import { SugerenciaForm } from './pages/SugerenciasPage'
-import CompShowPropuestas from './pages/propuestas/Propuestas'
+import SugerenciaForm from './pages/SugerenciasPage'
+import CompShowPropuestas from './pages/propuestas'
 import { Home } from './pages/HomePage'
 
-import './styles/app.css'
 import { NewsPage } from './pages/NewsPage'
+import HomeAdmin from './admin/HomeAdmin'
+import { Config } from './util/models/Config'
+import './styles/app.css'
+import NoticiasPage from './pages/NoticiasPage'
 
 
 function App() {
-    const [userId, setUserId] = useState<string>('')
+    const [isLoggued, setIsLogged] = useState<boolean>(false)
     const navigateTo = useNavigate()
 
-    const onLogin = (userId: string, vote: string) => {
-        setUserId(userId)
-        localStorage.setItem('userId', userId)
-        localStorage.setItem('vote', vote)
-        navigateTo(`/user/`)
-    }
-
-    const onLogout = () => {
-        setUserId('')
-        localStorage.removeItem('userId')
-        localStorage.removeItem('vote')
-        navigateTo('/login/new')
+    const onLoginAdmin = () => {
+        localStorage.setItem('loggued', 'true')
+        navigateTo('/admin/')
+        setIsLogged(true)
     }
 
     useEffect(() => {
-        const userId = localStorage.getItem('userId')
-        if (userId) {
-            setUserId(userId)
+        const loggued = localStorage.getItem('loggued')
+        setIsLogged(!!loggued)
+
+
+        const config = localStorage.getItem('config')
+        if (!config) {
+            const configObject: Config = {
+                tipo_eleccion: 2,
+                navbar_color: '#333'
+            }
+
+            localStorage.setItem('config', JSON.stringify(configObject));
         }
     }, [])
 
     return (
         <>
-            <NavBar userId={userId} />
+            <NavBar logged={isLoggued} />
             <main>
                 <Routes>
                     <Route path='/' element={<Home />} />
                     <Route path='/candidatos' element={<CandidatosPage />} />
-                    <Route path='/login/:state' element={<Login handleOnLogin={onLogin} />} />
-                    <Route path='/register' element={<Register />} />
-                    <Route path='/user/' element={<UserPage handleOnLogout={onLogout} />} />
+                    <Route path='/login/:state' element={<Login handleOnLoginAdmin={onLoginAdmin} />} />
                     <Route path='/propuestas' element={<CompShowPropuestas />} />
                     <Route path='/sugerencias' element={<SugerenciaForm />} />
-                    <Route path='/eventos/' element={<NewsPage/>} />
+                    <Route path='/eventos/' element={<NewsPage />} />
+                    <Route path='/noticias/' element={<NoticiasPage />} />
+                    <Route path='/admin/' element={<HomeAdmin />} />
                 </Routes>
             </main>
         </>
