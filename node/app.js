@@ -9,6 +9,7 @@ import adminRouter from './routes/adminRouter.js';
 import eventos from './routes/eventoRouter.js';
 import routerNoticias from './routes/newsRouter.js';
 import sugerencias from './routes/sugerenciasRoutes.js';
+import home from './routes/homeRoute.js';
 
 dotenv.config();
 const app = express();
@@ -24,7 +25,7 @@ app.use('/api/administradores', adminRouter);
 app.use('/api/eventos', eventos);
 app.use('/api/sugerencias', sugerencias);
 app.use('/api/noticias', routerNoticias);
-
+app.use('/api/home', home);
 
 app.get('/test', (req, res) => {
     res.json({ message: 'Backend is running' });

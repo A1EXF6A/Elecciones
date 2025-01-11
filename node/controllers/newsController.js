@@ -1,4 +1,4 @@
-import Noticia from "../models/NewModel.js";
+import Noticia from "../models/newModel.js";
 
 const getAllNewsFav = async (req, res) => {
     try {
