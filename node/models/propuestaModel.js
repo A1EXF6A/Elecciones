@@ -34,7 +34,7 @@ const Propuesta = db.define('propuesta', {
         defaultValue: 0,
     },
 }, {
-    tableName: 'propuestas',
+    tableName: 'propuesta',
     timestamps: false,
 });
 
