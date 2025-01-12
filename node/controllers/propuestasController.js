@@ -35,7 +35,8 @@ const getAllPropuestas = async (req, res) => {
 const getPropuestasFav = async (req, res) => {
     try {
         const propuestas = await Propuesta.findAll({
-            where: { favorita: 1 }
+            where: { favorita: 1 },
+            limit: 3,
         });
 
         if (!propuestas || propuestas.length === 0) {

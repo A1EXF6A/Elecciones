@@ -1,56 +1,90 @@
-import { FC, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { NoticiaCorta } from '../util/models/newsType';
-import { getNoticiasFavoritas } from '../util/news';
 import { PropuestaCorta } from '../util/models/propuestaType';
+import { getNoticiasFavoritas } from '../util/news';
 import { getPropuestasFavoritas } from '../util/propuestas';
 
-const Home: FC = () => {
-    const [noticiasFav, setNoticiasFav] = useState<NoticiaCorta[]>([]);
-    const [propuestasFav, setPropuestasFav] = useState<PropuestaCorta[]>([]);
+interface Item {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+}
 
-    useEffect(() => {
-        const getNoticias = async () => {
-            const { noticias } = await getNoticiasFavoritas();
+const eventos: Item[] = [
+  { id: 1, title: 'Evento 1', description: 'Descripción de evento 1', imageUrl: 'https://fisei.uta.edu.ec/v4.0/images/Noticias/congreso.jpg' },
+  { id: 2, title: 'Evento 2', description: 'Descripción de evento 2', imageUrl: 'https://fisei.uta.edu.ec/v4.0/images/Noticias/OfertaAcademicaPregrado2024/OfertaAcademicaPregrado.png' },
+  { id: 3, title: 'Evento 3', description: 'Descripción de evento 3', imageUrl: 'https://fisei.uta.edu.ec/v4.0/images/Noticias/Aranceles2024/BannerAranceles2024.png' },
+];
 
-            if (noticias) {
-                setNoticiasFav(noticias);
-            }
-        }
+const Home: React.FC = () => {
+  const [noticiasFav, setNoticiasFav] = useState<NoticiaCorta[]>([]);
+  const [propuestasFav, setPropuestasFav] = useState<PropuestaCorta[]>([]);
 
-        const getPropuestas = async () => {
-            const { propuestas } = await getPropuestasFavoritas();
+  useEffect(() => {
+    const getNoticias = async () => {
+      const { noticias } = await getNoticiasFavoritas();
 
-            if (propuestas) {
-                setPropuestasFav(propuestas)
-            }
-        }
+      if (noticias) {
+        setNoticiasFav(noticias);
+      }
+    }
 
-        getNoticias();
-        getPropuestas();
-    }, [])
+    const getPropuestas = async () => {
+      const { propuestas } = await getPropuestasFavoritas();
 
-    return (
-        <div>
-            <h2>Noticias Favoritas</h2>
-            <ul>
-                {noticiasFav.length === 0 ?
-                    <h1>No existen noticias favoritas</h1> :
-                    noticiasFav.map((noticia) => (
-                        <li key={noticia.id}>{noticia.titulo}</li>
-                    ))
-                }
-            </ul>
-            <h2>Propuestas favoritas</h2>
-            <ul>
-                {propuestasFav.length === 0 ?
-                    <h1>No existen propuestas favoritas</h1> :
-                    propuestasFav.map((propuesta) => (
-                        <li key={propuesta.id}>{propuesta.titulo}</li>
-                    ))
-                }
-            </ul>
+      if (propuestas) {
+        setPropuestasFav(propuestas)
+      }
+    }
+
+    getNoticias();
+    getPropuestas();
+  }, [])
+
+  return (
+    <div className="home-container">
+      <h1 className="custom-header">Descubre más sobre nuestras actividades</h1>
+
+      <section className="favorites-section">
+        <h2>Noticias Favoritas</h2>
+        <div className="items-container">
+          {noticiasFav.map((noticia) => (
+            <div key={noticia.id} className="item-card">
+              <img src={noticia.imgUrl} alt={noticia.titulo} className="item-image" />
+              <h3>{noticia.titulo}</h3>
+              <p>{noticia.description}</p>
+            </div>
+          ))}
         </div>
+      </section>
+      <section className="favorites-section">
+        <h2>Eventos Favoritos</h2>
+        <div className="items-container">
+          {eventos.map((evento) => (
+            <div key={evento.id} className="item-card">
+              <img src={evento.imageUrl} alt={evento.title} className="item-image" />
+              <h3>{evento.title}</h3>
+              <p>{evento.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-    );
+      <section className="favorites-section">
+        <h2>Propuestas Favoritas</h2>
+        <div className="items-container">
+          {propuestasFav.map((propuesta) => (
+            <div key={propuesta.id} className="item-card">
+              <img src={propuesta.imgUrl} alt={propuesta.titulo} className="item-image" />
+              <h3>{propuesta.titulo}</h3>
+              <p>{propuesta.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
 };
+
 export { Home };

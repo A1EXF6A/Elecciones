@@ -18,8 +18,10 @@ const getPropuestasFavoritas = async (): Promise<{ propuestas: PropuestaCorta[] 
 
         const propuestasObject: PropuestaCorta[] = res.data.data.map((propuesta) => {
             const propuestaCorta: PropuestaCorta = {
-                id: propuesta.id_not,
-                titulo: propuesta.titulo_not
+                id: propuesta.id_pro,
+                titulo: propuesta.titulo_pro,
+                description: propuesta.des_pro,
+                imgUrl: propuesta.img_pro
             }
             return propuestaCorta
         })

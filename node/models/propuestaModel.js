@@ -33,6 +33,10 @@ const Propuesta = db.define('propuesta', {
         allowNull: false,
         defaultValue: 0,
     },
+    img_pro: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+    },
 }, {
     tableName: 'propuestas',
     timestamps: false,

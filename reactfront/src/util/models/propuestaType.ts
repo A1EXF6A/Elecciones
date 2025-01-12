@@ -1,13 +1,16 @@
 type PropuestaCorta = {
     id: number;
     titulo: string;
+    description: string;
+    imgUrl: string;
 }
 
 type Propuesta = {
-    id_not: number,
-    titulo_not: string,
-    des_not: string,
-    favorita: boolean
+    id_pro: number,
+    titulo_pro: string,
+    des_pro: string,
+    favorita: boolean,
+    img_pro: string,
 }
 
 export type { PropuestaCorta, Propuesta }

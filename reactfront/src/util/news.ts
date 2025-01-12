@@ -18,7 +18,9 @@ const getNoticiasFavoritas = async (): Promise<{ noticias: NoticiaCorta[] | null
         const noticiasObject: NoticiaCorta[] = res.data.data.map((noticia) => {
             const noticiaCorta: NoticiaCorta = {
                 id: noticia.id_not,
-                titulo: noticia.titulo_not
+                titulo: noticia.titulo_not,
+                description: noticia.des_not,
+                imgUrl: noticia.img_not
             }
             return noticiaCorta
         })

@@ -3,7 +3,8 @@ import Noticia from "../models/NewModel.js";
 const getAllNewsFav = async (req, res) => {
     try {
         const noticias = await Noticia.findAll({
-            where: { favorita: 1 }
+            where: { favorita: 1 },
+            limit: 3,
         });
 
         if (!noticias || noticias.length === 0) {

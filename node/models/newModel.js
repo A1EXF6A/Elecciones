@@ -20,6 +20,10 @@ const Noticia = db.define('noticia', {
         allowNull: false,
         defaultValue: 0,
     },
+    img_not: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
 }, {
     tableName: 'noticias', 
     timestamps: false,
