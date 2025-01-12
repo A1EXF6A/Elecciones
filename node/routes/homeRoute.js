@@ -1,9 +1,9 @@
-import { Router } from 'express';
-import { getNoticiasFavoritas } from '../controllers/home.js';
+import express from 'express';
+import { newsfavs } from '../controllers/home.js';
 
-const router = Router();
+const routerNoticias = express.Router();
 
-// Ruta para obtener las noticias favoritas
-router.get('/fav', getNoticiasFavoritas);
+routerNoticias.get('/fav', newsfavs);
 
-export default router;
+
+export default routerNoticias

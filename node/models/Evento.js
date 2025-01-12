@@ -24,4 +24,4 @@ const Evento = sequelize.define('Evento', {
     timestamps: false,
 });
 
-export default Evento;  // Aquí se está usando export default
+export default Evento;  
