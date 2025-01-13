@@ -9,12 +9,29 @@ const AgregarEvento: React.FC = () => {
     const [fecha, setFecha] = useState<string>('');
     const [mensaje, setMensaje] = useState<string>('');
 
+    // Función para obtener la fecha actual en formato YYYY-MM-DD
+    const obtenerFechaActual = () => {
+        const hoy = new Date();
+        const anio = hoy.getFullYear();
+        const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dia = String(hoy.getDate()).padStart(2, '0');
+        return `${anio}-${mes}-${dia}`;
+    };
+
     // Manejar el envío del formulario
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+
+        // Validar que la fecha no sea anterior a la fecha actual
+        const fechaActual = obtenerFechaActual();
+        if (fecha < fechaActual) {
+            setMensaje('La fecha del evento no puede ser anterior a la fecha actual.');
+            return;
+        }
+
         try {
             // Enviar datos al backend
-            const response = await axios.post('http://localhost:8000/api/eventos', {
+            await axios.post('http://localhost:8000/api/eventos', {
                 nom_eve: nombre,
                 desc_eve: descripcion,
                 fec_eve: fecha,
@@ -62,6 +79,7 @@ const AgregarEvento: React.FC = () => {
                         type="date"
                         value={fecha}
                         onChange={(e) => setFecha(e.target.value)}
+                        min={obtenerFechaActual()} // Establece el valor mínimo en el campo de fecha
                         required
                     />
                 </div>

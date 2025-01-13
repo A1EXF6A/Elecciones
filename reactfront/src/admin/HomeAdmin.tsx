@@ -8,6 +8,7 @@ import ConfigPage from "../pages/ConfigPage";
 import ResultadosPage from "../pages/ResultadosPage";
 import Sugerencias from "./sugerencias";
 import Noticias from "./noticias";
+import AgregarNoticia from "./AgregarNoticia";
 
 interface Funcionalidad {
     id: number;
@@ -90,7 +91,7 @@ const AdminPanel: React.FC = () => {
                         )}
                         {selectedOption === "Agregar noticia" && (
                             <div>
-                                <AgregarEvento />
+                                <AgregarNoticia />
                             </div>
                         )}
                         {selectedOption === "Administrar noticias" && (

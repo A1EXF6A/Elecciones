@@ -19,3 +19,19 @@ export const agregarEvento = async (req, res) => {
         res.status(500).json({ error: 'Error al agregar el evento' });
     }
 };
+
+
+export const obtenerEventos = async (req, res) => {
+    try {
+        // Obtenemos todos los eventos
+        const eventos = await Evento.findAll();
+
+        if (!eventos || eventos.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron eventos' });
+        }
+
+        res.status(200).json(eventos); // Respondemos con los eventos encontrados
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener los eventos' });
+    }
+};

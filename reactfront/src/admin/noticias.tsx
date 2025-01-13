@@ -14,7 +14,7 @@ const NoticiasList: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const noticiasPerPage = 5; // Número de noticias por página
+    const noticiasPerPage = 4;
 
     // Obtener todas las noticias
     useEffect(() => {
@@ -76,83 +76,159 @@ const NoticiasList: React.FC = () => {
     };
 
     return (
-        <div className="container">
-            <h1>Lista de Noticias</h1>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+        <div style={styles.container}>
+            <h2 style={styles.title}>Noticias</h2>
 
-            <div style={{ marginBottom: '20px' }}>
+            {error && <p style={styles.error}>{error}</p>}
+
+            <div style={styles.filters}>
                 <input
                     type="text"
-                    placeholder="Buscar por título..."
+                    placeholder="Buscar por título"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{
-                        width: '100%',
-                        padding: '10px',
-                        fontSize: '16px',
-                        borderRadius: '5px',
-                        border: '1px solid #ccc',
-                    }}
+                    style={styles.filterInput}
                 />
             </div>
 
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-                {currentNoticias.map((noticia) => (
-                    <li
-                        key={noticia.id_not}
-                        style={{
-                            marginBottom: '20px',
-                            padding: '10px',
-                            border: '1px solid #ccc',
-                            borderRadius: '5px',
-                            backgroundColor: '#f9f9f9',
-                        }}
-                    >
-                        <h2>{noticia.titulo_not}</h2>
-                        <p>{noticia.des_not}</p>
-                        <p>
-                            <strong>Favorita:</strong> {noticia.favorita ? 'Sí' : 'No'}
-                        </p>
-                        <button
-                            style={{
-                                backgroundColor: noticia.favorita ? '#e74c3c' : '#2ecc71',
-                                color: '#fff',
-                                border: 'none',
-                                padding: '10px',
-                                borderRadius: '5px',
-                                cursor: 'pointer',
-                            }}
-                            onClick={() => toggleFavorita(noticia.id_not, noticia.favorita)}
-                        >
-                            {noticia.favorita ? 'Quitar de Favoritas' : 'Marcar como Favorita'}
-                        </button>
-                    </li>
-                ))}
-            </ul>
-
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                {Array.from({ length: Math.ceil(filteredNoticias.length / noticiasPerPage) }).map(
-                    (_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => paginate(index + 1)}
-                            style={{
-                                padding: '10px',
-                                margin: '0 5px',
-                                backgroundColor: currentPage === index + 1 ? '#3498db' : '#ccc',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: '5px',
-                                cursor: 'pointer',
-                            }}
-                        >
-                            {index + 1}
-                        </button>
-                    )
+            <div style={styles.grid}>
+                {currentNoticias.length === 0 ? (
+                    <p>No se encontraron noticias.</p>
+                ) : (
+                    currentNoticias.map((noticia) => (
+                        <div key={noticia.id_not} style={styles.newsItem}>
+                            <h3 style={styles.newsTitle}>{noticia.titulo_not}</h3>
+                            <p style={styles.newsDescription}>{noticia.des_not}</p>
+                            <p style={styles.newsFavorite}>
+                                <strong>Favorita:</strong> {noticia.favorita ? 'Sí' : 'No'}
+                            </p>
+                            <button
+                                style={noticia.favorita ? styles.removeFavoriteButton : styles.addFavoriteButton}
+                                onClick={() => toggleFavorita(noticia.id_not, noticia.favorita)}
+                            >
+                                {noticia.favorita ? 'Quitar de Favoritas' : 'Marcar como Favorita'}
+                            </button>
+                        </div>
+                    ))
                 )}
+            </div>
+
+            <div style={styles.pagination}>
+                {Array.from({ length: Math.ceil(filteredNoticias.length / noticiasPerPage) }, (_, index) => (
+                    <button
+                        key={index + 1}
+                        onClick={() => paginate(index + 1)}
+                        style={styles.paginationButton}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
             </div>
         </div>
     );
 };
 
 export default NoticiasList;
+
+const styles = {
+    container: {
+        padding: '20px',
+        maxWidth: '100%',
+        margin: '0 auto',
+        fontFamily: 'Arial, sans-serif',
+        backgroundColor: '#f9f9f9',
+        borderRadius: '10px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        minHeight: '100vh',
+    },
+    title: {
+        textAlign: 'center' as const,
+        fontSize: '28px',
+        color: '#2c3e50',
+        marginBottom: '30px',
+        fontWeight: '600',
+    },
+    grid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)', // 2 columnas
+        gap: '20px', // Espacio entre columnas y filas
+        padding: '0',
+        margin: '0',
+    },
+    newsItem: {
+        backgroundColor: '#f9fafb',
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        transition: 'transform 0.3s, box-shadow 0.3s',
+        cursor: 'pointer',
+    },
+    newsTitle: {
+        fontSize: '22px',
+        color: '#34495e',
+        fontWeight: '500',
+        marginBottom: '10px',
+    },
+    newsDescription: {
+        fontSize: '16px',
+        color: '#7f8c8d',
+        marginBottom: '10px',
+    },
+    newsFavorite: {
+        fontSize: '14px',
+        color: '#16a085',
+        fontStyle: 'italic',
+    },
+    error: {
+        color: '#e74c3c',
+        textAlign: 'center' as const,
+        marginBottom: '30px',
+        fontSize: '18px',
+    },
+    pagination: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: '30px',
+    },
+    paginationButton: {
+        backgroundColor: '#2980b9',
+        color: '#ffffff',
+        border: 'none',
+        padding: '12px 25px',
+        margin: '0 10px',
+        cursor: 'pointer',
+        borderRadius: '30px',
+        fontSize: '16px',
+        fontWeight: '500',
+        transition: 'background-color 0.3s, transform 0.3s',
+    },
+    addFavoriteButton: {
+        backgroundColor: '#2ecc71',
+        color: '#fff',
+        border: 'none',
+        padding: '10px',
+        borderRadius: '5px',
+        cursor: 'pointer',
+    },
+    removeFavoriteButton: {
+        backgroundColor: '#e74c3c',
+        color: '#fff',
+        border: 'none',
+        padding: '10px',
+        borderRadius: '5px',
+        cursor: 'pointer',
+    },
+    filters: {
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '10px',
+        marginBottom: '20px',
+    },
+    filterInput: {
+        padding: '8px',
+        border: '1px solid #ccc',
+        borderRadius: '5px',
+        fontSize: '14px',
+    },
+};
