@@ -28,17 +28,6 @@ const obtenerNoticias = async (req, res) => {
 };
 
 
-const crearNoticia = async (req, res) => {
-    try {
-        const { titulo_not, des_not, favorita } = req.body;
-        const nuevaNoticia = await Noticia.create({ titulo_not, des_not, favorita: favorita || 0 });
-        res.status(201).json(nuevaNoticia);
-    } catch (error) {
-        console.error('Error al crear la noticia:', error);
-        res.status(500).json({ error: 'Error al crear la noticia.' });
-    }
-};
-
 
 const cambiarFavorita = async (req, res) => {
     try {
@@ -57,6 +46,29 @@ const cambiarFavorita = async (req, res) => {
     } catch (error) {
         console.error('Error al cambiar el estado de favorita:', error);
         res.status(500).json({ error: 'Error al cambiar el estado de favorita.' });
+    }
+};
+
+const crearNoticia = async (req, res) => {
+    try {
+        const { titulo_not, des_not, favorita } = req.body;
+
+        // Validar campos requeridos
+        if (!titulo_not || !des_not) {
+            return res.status(400).json({ error: 'Título y descripción son obligatorios.' });
+        }
+
+        // Crear noticia sin fecha
+        const nuevaNoticia = await Noticia.create({
+            titulo_not,
+            des_not,
+            favorita: favorita || 0, // Valor predeterminado
+        });
+
+        res.status(201).json({ message: 'Noticia creada con éxito', noticia: nuevaNoticia });
+    } catch (error) {
+        console.error('Error al crear la noticia:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
     }
 };
 

@@ -67,6 +67,4 @@ const getPropuestasFav = async (req, res) => {
     }
 };
 
-
-
 export { newsfavs, getEventosProximos, getPropuestasFav };

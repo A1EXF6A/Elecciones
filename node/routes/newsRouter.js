@@ -4,9 +4,10 @@ import { getAllNewsFav, obtenerNoticias, crearNoticia, cambiarFavorita } from '.
 const routerNoticias = express.Router();
 
 routerNoticias.get('/favoritas', getAllNewsFav);
+routerNoticias.get('/ver', obtenerNoticias);
 routerNoticias.get('/', obtenerNoticias);
 
-routerNoticias.post('/', crearNoticia);
+routerNoticias.post('/crear', crearNoticia);
 
 routerNoticias.patch('/:id_not', cambiarFavorita);
 

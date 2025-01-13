@@ -10,14 +10,18 @@ import eventos from './routes/eventoRouter.js';
 import routerNoticias from './routes/newsRouter.js';
 import sugerencias from './routes/sugerenciasRoutes.js';
 import home from './routes/homeRoute.js';
+import bodyParser from 'body-parser'; // Importar body-parser
 
 dotenv.config();
 const app = express();
 
 app.use(cors());
 
-app.use(express.json());
+// Limitar el tamaño del cuerpo JSON a 10MB usando body-parser
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
+// Rutas de la API
 app.use('/api/tipoEleccion', tipoEleccionRoutes);
 app.use('/api/candidatos', candidatoRoutes);
 app.use('/api/propuestas', routerPro);

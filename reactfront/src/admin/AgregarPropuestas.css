@@ -1,21 +1,40 @@
 :root {
     --primary-color: #3498db;
+    --primary-hover-color: #2980b9;
     --secondary-color: #2ecc71;
     --background-color: #f4f6f7;
     --text-color: #2c3e50;
+    --text-light: #7f8c8d;
     --border-radius: 8px;
     --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
 }
+
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Container styling */
 .container {
     max-width: 800px;
     margin: 20px auto;
-    background-color: white;
+    background-color: #fff;
     padding: 30px;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     color: var(--text-color);
+    transition: var(--transition);
 }
 
+.container:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Heading styling */
 h3 {
     text-align: center;
     color: var(--primary-color);
@@ -23,6 +42,17 @@ h3 {
     font-weight: 600;
 }
 
+h3::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: var(--primary-color);
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+/* Select container styling */
 .select-container {
     display: flex;
     gap: 15px;
@@ -34,21 +64,26 @@ h3 {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: var(--border-radius);
-    transition: all 0.3s ease;
-    appearance: none;
+    background-color: #fff;
     background-image: linear-gradient(45deg, transparent 50%, var(--primary-color) 50%),
         linear-gradient(135deg, var(--primary-color) 50%, transparent 50%);
     background-position: calc(100% - 20px) calc(1em + 2px),
         calc(100% - 15px) calc(1em + 2px);
-    background-size: 5px 5px,
-        5px 5px;
+    background-size: 5px 5px, 5px 5px;
     background-repeat: no-repeat;
+    appearance: none;
+    color: var(--text-light);
+    transition: var(--transition);
+}
+
+.select-container select:hover {
+    border-color: var(--primary-color);
 }
 
 .select-container select:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
 /* Form styling */
@@ -60,6 +95,7 @@ form {
 form h4 {
     margin-bottom: 15px;
     color: var(--secondary-color);
+    font-weight: bold;
 }
 
 form div {
@@ -75,17 +111,19 @@ form input,
 form textarea {
     width: 100%;
     padding: 12px;
-    margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: var(--border-radius);
-    transition: all 0.3s ease;
+    transition: var(--transition);
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: #fff;
 }
 
 form input:focus,
 form textarea:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
 /* Submit button styling */
@@ -93,16 +131,19 @@ form button {
     padding: 12px;
     width: 100%;
     background-color: var(--primary-color);
-    color: white;
+    color: #fff;
     border: none;
     border-radius: var(--border-radius);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
+    font-size: 1rem;
+    font-weight: bold;
 }
 
 form button:hover {
-    background-color: #2980b9;
+    background-color: var(--primary-hover-color);
     transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 form button:active {
@@ -118,19 +159,7 @@ form textarea:disabled {
     opacity: 0.7;
 }
 
-/* Responsive design */
-@media (max-width: 600px) {
-    .container {
-        margin: 10px;
-        padding: 20px;
-    }
-
-    .select-container {
-        flex-direction: column;
-        gap: 10px;
-    }
-}
-
+/* Alert messages */
 .mensaje {
     margin-top: 10px;
     padding: 10px;
@@ -149,4 +178,42 @@ form textarea:disabled {
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .container {
+        margin: 10px;
+        padding: 20px;
+    }
+
+    .select-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+.propuestas-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+    gap: 20px; /* Espacio entre las tarjetas */
+    margin-top: 20px;
+}
+
+.propuesta-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.propuesta-card h3 {
+    margin-top: 0;
+}
+
+.paginacion {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
 }

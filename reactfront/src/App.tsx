@@ -7,11 +7,12 @@ import SugerenciaForm from './pages/SugerenciasPage'
 import CompShowPropuestas from './pages/propuestas'
 import { Home } from './pages/HomePage'
 
-import { NewsPage } from './pages/NewsPage'
+//import { NewsPage } from './pages/NewsPage'
 import HomeAdmin from './admin/HomeAdmin'
 import { Config } from './util/models/Config'
 import './styles/app.css'
 import NoticiasPage from './pages/NoticiasPage'
+import EventosList from './pages/Eventos'
 
 
 function App() {
@@ -50,7 +51,7 @@ function App() {
                     <Route path='/login/:state' element={<Login handleOnLoginAdmin={onLoginAdmin} />} />
                     <Route path='/propuestas' element={<CompShowPropuestas />} />
                     <Route path='/sugerencias' element={<SugerenciaForm />} />
-                    <Route path='/eventos/' element={<NewsPage />} />
+                    <Route path='/eventos/' element={<EventosList />} />
                     <Route path='/noticias/' element={<NoticiasPage />} />
                     <Route path='/admin/' element={<HomeAdmin />} />
                 </Routes>

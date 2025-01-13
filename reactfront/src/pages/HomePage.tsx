@@ -288,7 +288,7 @@ const styles = {
     loadMoreButton: {
         padding: '10px 20px',
         fontSize: '16px',
-        backgroundColor: '#007BFF',
+        backgroundColor: '#2980b9',
         color: 'white',
         border: 'none',
         borderRadius: '5px',
